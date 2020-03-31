@@ -1,5 +1,6 @@
 package de.internetsicherheit.brl.bloxberg.cache;
 
+import de.internetsicherheit.brl.bloxberg.cache.ethereum.BloxbergClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

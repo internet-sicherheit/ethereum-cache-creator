@@ -1,4 +1,6 @@
-package de.internetsicherheit.brl.bloxberg.cache;
+package de.internetsicherheit.brl.bloxberg.cache.persistence;
+
+import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithTransactionCombination;
 
 import java.io.IOException;
 import java.math.BigInteger;

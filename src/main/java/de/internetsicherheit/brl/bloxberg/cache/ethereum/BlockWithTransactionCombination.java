@@ -1,4 +1,4 @@
-package de.internetsicherheit.brl.bloxberg.cache;
+package de.internetsicherheit.brl.bloxberg.cache.ethereum;
 
 import java.math.BigInteger;
 

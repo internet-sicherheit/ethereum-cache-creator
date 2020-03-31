@@ -1,5 +1,6 @@
-package de.internetsicherheit.brl.bloxberg.cache;
+package de.internetsicherheit.brl.bloxberg.cache.persistence;
 
+import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithTransactionCombination;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

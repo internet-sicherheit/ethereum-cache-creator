@@ -1,26 +1,24 @@
 package de.internetsicherheit.brl.bloxberg.cache;
 
 
+import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithTransactionCombination;
+import de.internetsicherheit.brl.bloxberg.cache.persistence.CacheFileReader;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Path;
 
-public class DataBlockSummerizer {
+public class BlockAggregator {
 
-    // Nummer des ersten Blocks
-    private int start;
-
-    // Gesamtanzahl der Blöcke => ende = start + range - 1
-    private int range;
 
     private BlockGroup[] blockGroups;
 
     private CacheFileReader cfr;
 
-    private Path workDir;
 
-    public DataBlockSummerizer(Path workDir) {
-        this.workDir = workDir;
+
+    public BlockAggregator(Path workDir) {
+        // instead use interface that provides BlockWithTransactionsCombination
         this.cfr = new CacheFileReader(workDir);
 
     }
@@ -33,7 +31,7 @@ public class DataBlockSummerizer {
      * @return an Array of Blockgroups
      * @throws IOException exception when file cannot be read
      */
-        public BlockGroup[] summerizeData(int start, int end , int groupSize) throws IOException {
+        public BlockGroup[] aggregate(int start, int end , int groupSize) throws IOException {
 
 
             // different ArraySize required depending on groupSize and start/endpoint

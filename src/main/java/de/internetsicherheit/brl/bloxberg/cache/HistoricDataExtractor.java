@@ -1,5 +1,8 @@
 package de.internetsicherheit.brl.bloxberg.cache;
 
+import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithTransactionCombination;
+import de.internetsicherheit.brl.bloxberg.cache.ethereum.BloxbergClient;
+import de.internetsicherheit.brl.bloxberg.cache.persistence.EthereumWriter;
 import org.rnorth.ducttape.RetryCountExceededException;
 import org.rnorth.ducttape.unreliables.Unreliables;
 

@@ -1,4 +1,4 @@
-package de.internetsicherheit.brl.bloxberg.cache;
+package de.internetsicherheit.brl.bloxberg.cache.ethereum;
 
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;

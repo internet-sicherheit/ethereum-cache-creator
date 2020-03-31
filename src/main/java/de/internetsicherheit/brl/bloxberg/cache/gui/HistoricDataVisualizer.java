@@ -1,5 +1,10 @@
-package de.internetsicherheit.brl.bloxberg.cache;
+package de.internetsicherheit.brl.bloxberg.cache.gui;
 
+import de.internetsicherheit.brl.bloxberg.cache.BlockAggregator;
+import de.internetsicherheit.brl.bloxberg.cache.BlockGroup;
+import de.internetsicherheit.brl.bloxberg.cache.HistoricDataExtractor;
+import de.internetsicherheit.brl.bloxberg.cache.ethereum.BloxbergClient;
+import de.internetsicherheit.brl.bloxberg.cache.persistence.EthereumWriter;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
@@ -49,7 +54,7 @@ public class HistoricDataVisualizer extends Application {
         client = new BloxbergClient(ETHEREUM_NETWORK);
         // add inputfield for the file name.
         writer = new EthereumWriter(Path.of(OUTPUTDIRECTORY), "ExtractedData3.txt");
-        DataBlockSummerizer dbs = initDataBlockSummerizer();
+        BlockAggregator dbs = initDataBlockSummerizer();
 
         //extract
         HistoricDataExtractor extractor = new HistoricDataExtractor(client, writer, range);
@@ -59,7 +64,7 @@ public class HistoricDataVisualizer extends Application {
         */
 
         // visualize
-        BlockGroup[] bgA = dbs.summerizeData(start, end, groupsize);
+        BlockGroup[] bgA = dbs.aggregate(start, end, groupsize);
 
         primaryStage.setTitle("Historic Data Visualizer");
         primaryStage.setScene(generateLineChart(bgA));
@@ -108,10 +113,10 @@ public class HistoricDataVisualizer extends Application {
      * the range is specified in the method summerizeData(start, end, groupSize)
      * @return the DataBlockSummerizer
      */
-    private DataBlockSummerizer initDataBlockSummerizer() {
+    private BlockAggregator initDataBlockSummerizer() {
 
         Path workDir= Paths.get((OUTPUTDIRECTORY) + "ExtractedData.txt");
-        return new DataBlockSummerizer(workDir);
+        return new BlockAggregator(workDir);
     }
 
 }
