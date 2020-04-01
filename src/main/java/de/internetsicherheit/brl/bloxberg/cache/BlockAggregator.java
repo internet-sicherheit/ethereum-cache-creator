@@ -6,7 +6,6 @@ import de.internetsicherheit.brl.bloxberg.cache.persistence.CacheFileReader;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.file.Path;
 
 public class BlockAggregator {
 
@@ -17,9 +16,9 @@ public class BlockAggregator {
 
 
 
-    public BlockAggregator(Path workDir) {
-        // instead use interface that provides BlockWithTransactionsCombination
-        this.cfr = new CacheFileReader(workDir);
+    public BlockAggregator(CacheFileReader cfr) {
+        // instead use interface that provides BlockWithTransactionsCombinations
+        this.cfr = cfr;
 
     }
 

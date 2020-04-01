@@ -4,6 +4,7 @@ import de.internetsicherheit.brl.bloxberg.cache.BlockAggregator;
 import de.internetsicherheit.brl.bloxberg.cache.BlockGroup;
 import de.internetsicherheit.brl.bloxberg.cache.HistoricDataExtractor;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BloxbergClient;
+import de.internetsicherheit.brl.bloxberg.cache.persistence.CacheFileReader;
 import de.internetsicherheit.brl.bloxberg.cache.persistence.EthereumWriter;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -116,7 +117,8 @@ public class HistoricDataVisualizer extends Application {
     private BlockAggregator initDataBlockSummerizer() {
 
         Path workDir= Paths.get((OUTPUTDIRECTORY) + "ExtractedData.txt");
-        return new BlockAggregator(workDir);
+        CacheFileReader cfr = new CacheFileReader(workDir);
+        return new BlockAggregator(cfr);
     }
 
 }
