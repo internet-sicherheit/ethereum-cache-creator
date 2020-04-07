@@ -22,7 +22,9 @@ public class BlockGroup{
         this.start = start;
         this.sum = sum;
     }
-
+    public void addToSum(int addition) {
+        sum = sum + addition;
+    }
     public BigInteger getStart() {
         return start;
     }

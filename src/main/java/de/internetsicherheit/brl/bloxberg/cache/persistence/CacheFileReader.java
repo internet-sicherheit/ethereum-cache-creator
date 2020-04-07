@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 public class CacheFileReader {
     private final Path inputFilePath;
+    public int lineCount;
 
     /**
      * A Reader that can read data from a file written by the EthereumWriter
@@ -17,6 +18,16 @@ public class CacheFileReader {
      */
     public CacheFileReader(Path inputFilePath) {
         this.inputFilePath = inputFilePath;
+        this.lineCount = 0;
+        try {
+            this.lineCount = (int)countLines();
+            System.out.println("lineCount: " + lineCount);
+        } catch (IOException e) {
+        }
+
+    }
+    public long countLines() throws IOException{
+        return Files.lines(inputFilePath).count();
     }
 
     /**
@@ -44,6 +55,7 @@ public class CacheFileReader {
                 .map(this::parseLine)
                 .limit(end);
     }
+
 
     /**
      * this method is being USED in the current implementation of the programm

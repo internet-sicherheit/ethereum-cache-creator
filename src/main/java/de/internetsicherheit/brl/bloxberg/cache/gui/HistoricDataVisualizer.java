@@ -2,7 +2,6 @@ package de.internetsicherheit.brl.bloxberg.cache.gui;
 
 import de.internetsicherheit.brl.bloxberg.cache.BlockAggregator;
 import de.internetsicherheit.brl.bloxberg.cache.BlockGroup;
-import de.internetsicherheit.brl.bloxberg.cache.HistoricDataExtractor;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BloxbergClient;
 import de.internetsicherheit.brl.bloxberg.cache.persistence.CacheFileReader;
 import de.internetsicherheit.brl.bloxberg.cache.persistence.EthereumWriter;
@@ -14,10 +13,10 @@ import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class HistoricDataVisualizer extends Application {
@@ -41,10 +40,10 @@ public class HistoricDataVisualizer extends Application {
 
         // change to inputfield
         // from current block backwards -  does this make sense?
-        int range = 10000;
+        int limit = 10000;
 
         // change to inputfield
-        int start = 5600437;
+        int start = 0;
 
         // change to inputfield
         int end = 5342081;
@@ -58,8 +57,13 @@ public class HistoricDataVisualizer extends Application {
         // add inputfield for the file name.
         writer = new EthereumWriter(Path.of(OUTPUTDIRECTORY), "ExtractedData3.txt");
         BlockAggregator dbs = initDataBlockSummerizer();
-        ArrayList<Integer> a= dbs.addGroupTransactions(start,range,10);
-        System.out.println(a.get(0));
+
+        ArrayList<BlockGroup> blockGroups = dbs.addGroupTransactions(start, limit,1000);
+        Iterator it = blockGroups.iterator();
+        while(it.hasNext()) {
+            BlockGroup currentBlock = (BlockGroup)it.next();
+            System.out.println("summe der Transaktionen pro 1000 blöcke: " +currentBlock.getSum());
+        }
 
        /* //extract
         HistoricDataExtractor extractor = new HistoricDataExtractor(client, writer, range);
@@ -121,6 +125,7 @@ public class HistoricDataVisualizer extends Application {
     private BlockAggregator initDataBlockSummerizer() {
 
         Path workDir= Paths.get((OUTPUTDIRECTORY) + "ExtractedData3.txt");
+        System.out.println("workdir: " + workDir);
         CacheFileReader cfr = new CacheFileReader(workDir);
         return new BlockAggregator(cfr);
     }

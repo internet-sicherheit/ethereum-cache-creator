@@ -5,11 +5,10 @@ import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithTransactionCom
 import de.internetsicherheit.brl.bloxberg.cache.persistence.CacheFileReader;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 public class BlockAggregator {
 
@@ -29,37 +28,42 @@ public class BlockAggregator {
     /**
      * Method that generates an Array of Type Blockgroup, that can be easily used for visualization
      * @param start the blocknumber of the first block to be looked at
-     * @param sumBlocks the blocknumber of the last block to be looked at
+     * @param limit the blocknumber of the last block to be looked at
      * @param groupSize the Size of groups of blocks.
      * @return an Array of Blockgroups
      * @throws IOException exception when file cannot be read
      */
-        public ArrayList<Integer> addGroupTransactions(int start, int sumBlocks , int groupSize) throws IOException {
+        public ArrayList<BlockGroup> addGroupTransactions(int start, int limit , int groupSize) throws IOException {
+
             ArrayList<BlockGroup> blockGroups = new ArrayList<BlockGroup>();
-            ArrayList<Integer> blockGroupsInt = new ArrayList<Integer>();
-            Stream<BlockWithTransactionCombination> blockStream = this.cfr.readLines(start,start+5);
-            Iterator<BlockWithTransactionCombination> iterator = blockStream.iterator();
-            int end = start + sumBlocks;
-            int counter = start;
-            int transactionsSum = 0;
-            System.out.println(iterator.hasNext());
+            ArrayList<BlockWithTransactionCombination> bwtcList = new ArrayList<BlockWithTransactionCombination>
+                    (this.cfr.readLines(start, limit).collect(Collectors.toList()));
 
-            while(iterator.hasNext()) {
+            Iterator it = bwtcList.iterator();
+            int groupCounter = groupSize;
 
-                    BlockWithTransactionCombination next = iterator.next();
-                    transactionsSum = transactionsSum + next.transactionCount;
-
-                counter++;
+            while(it.hasNext()) {
+                BlockWithTransactionCombination bwtc = (BlockWithTransactionCombination)it.next();
+                if (!(groupCounter < groupSize)) {
+                    BlockGroup block = new BlockGroup(bwtc.blockNumber, bwtc.transactionCount, groupSize);
+                    blockGroups.add(block);
+                    groupCounter = 0;
+                } else  {
+                    blockGroups.get(blockGroups.size() -1).addToSum(bwtc.transactionCount);
+                    System.out.println("transactionCount in latest block: " + blockGroups
+                            .get(blockGroups.size() - 1).getSum());
+                }
+                groupCounter++;
             }
-            blockGroupsInt.add(transactionsSum);
-           // blockGroups.add(new BlockGroup(BigInteger.valueOf(start), transactionsSum, 0));
 
 
-       return blockGroupsInt;
+
+
+       return blockGroups;
 
     }
 
-    public BlockGroup[] addGroupTransactionsOne(int start, int end , int groupSize) throws IOException {
+    public BlockGroup[] addGroupTransactionsOld(int start, int end , int groupSize) throws IOException {
 
 
         // different ArraySize required depending on groupSize and start/endpoint
