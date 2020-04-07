@@ -14,8 +14,10 @@ import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 
 public class HistoricDataVisualizer extends Application {
@@ -39,10 +41,10 @@ public class HistoricDataVisualizer extends Application {
 
         // change to inputfield
         // from current block backwards -  does this make sense?
-        int range = 1000000;
+        int range = 10000;
 
         // change to inputfield
-        int start = 0;
+        int start = 5600437;
 
         // change to inputfield
         int end = 5342081;
@@ -56,21 +58,23 @@ public class HistoricDataVisualizer extends Application {
         // add inputfield for the file name.
         writer = new EthereumWriter(Path.of(OUTPUTDIRECTORY), "ExtractedData3.txt");
         BlockAggregator dbs = initDataBlockSummerizer();
+        ArrayList<Integer> a= dbs.addGroupTransactions(start,range,10);
+        System.out.println(a.get(0));
 
-        //extract
+       /* //extract
         HistoricDataExtractor extractor = new HistoricDataExtractor(client, writer, range);
-        /*extractor.extractAllData();
+        *//*extractor.extractAllData();
          TO DO: autoextract = readlastline --> getLastBlocknumberInFile --> extract from lastBlocknumberInFile to
          current blocknumber --> writeNewLines
-        */
+        *//*
 
         // visualize
-        BlockGroup[] bgA = dbs.aggregate(start, end, groupsize);
+        BlockGroup[] bgA = dbs.addGroupTransactions(start, end, groupsize);
 
         primaryStage.setTitle("Historic Data Visualizer");
         primaryStage.setScene(generateLineChart(bgA));
 
-        primaryStage.show();
+        primaryStage.show();*/
 
     }
 
@@ -116,7 +120,7 @@ public class HistoricDataVisualizer extends Application {
      */
     private BlockAggregator initDataBlockSummerizer() {
 
-        Path workDir= Paths.get((OUTPUTDIRECTORY) + "ExtractedData.txt");
+        Path workDir= Paths.get((OUTPUTDIRECTORY) + "ExtractedData3.txt");
         CacheFileReader cfr = new CacheFileReader(workDir);
         return new BlockAggregator(cfr);
     }

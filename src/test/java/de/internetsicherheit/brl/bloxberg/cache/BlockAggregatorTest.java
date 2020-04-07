@@ -16,7 +16,7 @@ public class BlockAggregatorTest {
         int start = 0;
         int end = 2227;
         int groupSize = 100;
-        BlockGroup[] bg = dbs.aggregate(start, end, groupSize);
+        BlockGroup[] bg = dbs.addGroupTransactions(start, end, groupSize);
 
         assertThat(bg.length).isEqualTo(end/groupSize + 1);
         assertThat(bg[0].getStart()).isEqualTo(0);

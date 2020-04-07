@@ -7,11 +7,17 @@ package de.internetsicherheit.brl.bloxberg.cache.gui;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class FxmlController {
+
+    @FXML
+    //
+    private Label label;
+
     @FXML
     // The reference of inputText will be injected by the FXML loader
     private TextField inputText;

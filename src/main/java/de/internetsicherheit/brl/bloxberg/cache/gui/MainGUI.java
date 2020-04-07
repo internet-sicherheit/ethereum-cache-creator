@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.control.Button;
+import org.w3c.dom.html.HTMLButtonElement;
 
 
 /**
@@ -13,6 +15,8 @@ import javafx.stage.Stage;
  * delete and rename historicDataViszualizer accordingly
  */
 public class MainGUI extends Application {
+    Stage window;
+    Scene sceneOne, sceneTwo;
 
     public static void main(String[] args) {
         launch(args);
@@ -20,6 +24,7 @@ public class MainGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        window = primaryStage;
 
         //HistoricDataVisualizer visualizer = new HistoricDataVisualizer();
         primaryStage.setTitle("Bloxberg Cache Creator");
