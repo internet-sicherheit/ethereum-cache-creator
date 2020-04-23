@@ -24,6 +24,8 @@ public class HistoricDataExtractor {
         this.writer = writer;
         this.range = range;
 
+
+
     }
 
     /**

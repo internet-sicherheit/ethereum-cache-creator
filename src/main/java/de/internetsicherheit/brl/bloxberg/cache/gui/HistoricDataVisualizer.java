@@ -58,41 +58,39 @@ public class HistoricDataVisualizer extends Application {
         writer = new EthereumWriter(Path.of(OUTPUTDIRECTORY), "ExtractedData3.txt");
         BlockAggregator dbs = initDataBlockSummerizer();
 
-        ArrayList<BlockGroup> blockGroups = dbs.addGroupTransactions(start, limit,1000);
-        Iterator it = blockGroups.iterator();
-        while(it.hasNext()) {
-            BlockGroup currentBlock = (BlockGroup)it.next();
-            System.out.println("summe der Transaktionen pro 1000 blöcke: " +currentBlock.getSum());
-        }
 
        /* //extract
         HistoricDataExtractor extractor = new HistoricDataExtractor(client, writer, range);
         *//*extractor.extractAllData();
          TO DO: autoextract = readlastline --> getLastBlocknumberInFile --> extract from lastBlocknumberInFile to
          current blocknumber --> writeNewLines
-        *//*
+        */
 
-        // visualize
-        BlockGroup[] bgA = dbs.addGroupTransactions(start, end, groupsize);
+         //visualize
+
+        ArrayList<BlockGroup> blockGroups = dbs.addGroupTransactions(start, limit,1000);
 
         primaryStage.setTitle("Historic Data Visualizer");
-        primaryStage.setScene(generateLineChart(bgA));
+        primaryStage.setScene(generateLineChart(blockGroups));
 
-        primaryStage.show();*/
+        primaryStage.show();
+
 
     }
 
     /**
      * generates a LineChart from a BlockGroup Array.
-     * @param bgA the Blockgroup Array representing all blocks and their transactions that are being used to generate
+     * @param blockGroups the Blockgroup ArrayList representing all blocks and their transactions that are being used to generate
      *            the chart
      * @return return the scene that needs to be rendered.
      */
-    private Scene generateLineChart(BlockGroup[] bgA) {
+    private Scene generateLineChart(ArrayList<BlockGroup> blockGroups) {
 
         //defining the axes
-        final NumberAxis xAxis = new NumberAxis(bgA[0].getStart().doubleValue(),
-                bgA[bgA.length-1].getStart().doubleValue() + bgA[bgA.length-1].getRange(), bgA[bgA.length-1].getRange());
+        final NumberAxis xAxis = new NumberAxis(blockGroups.get(0).getStart().doubleValue(), blockGroups.get(blockGroups.size()-1).getStart().doubleValue() + blockGroups.get(blockGroups.size()-1).getRange(),
+        blockGroups.get(blockGroups.size()-1).getRange());
+        /*final NumberAxis xAxis = new NumberAxis(bgA[0].getStart().doubleValue(),
+                bgA[bgA.length-1].getStart().doubleValue() + bgA[bgA.length-1].getRange(), bgA[bgA.length-1].getRange());*/
         final NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Blocknumbers");
         yAxis.setLabel("Transactions");
@@ -103,13 +101,19 @@ public class HistoricDataVisualizer extends Application {
         lineChart.setTitle("Transaction in Blockchain history");
         //defining a series
         XYChart.Series series = new XYChart.Series();
-        series.setName("Number of Transactions per " + bgA[bgA.length-1].getRange() + " blocks");
+        series.setName("Number of Transactions per " + blockGroups.get(blockGroups.size()-1).getRange() + " blocks");
+        Iterator it = blockGroups.iterator();
+        while(it.hasNext()) {
+            BlockGroup currentBlock = (BlockGroup)it.next();
+            series.getData().add(new XYChart.Data(currentBlock.getStart(), currentBlock.getSum()));
 
+            System.out.println("summe der Transaktionen pro 1000 blöcke: " +currentBlock.getSum());
+        }
         //populating the series with data  (length -1  ?)
-        for(int i = 0; i < bgA.length; i++) {
+        /*for(int i = 0; i < bgA.length; i++) {
 
                 series.getData().add(new XYChart.Data(bgA[i].getStart(), bgA[i].getSum()));
-        }
+        }*/
 
         Scene scene  = new Scene(lineChart,800,600);
         lineChart.getData().add(series);

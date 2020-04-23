@@ -25,7 +25,9 @@ public class BloxbergClient {
     public BigInteger getCurrentBlockNumber() throws IOException {
 
         EthBlockNumber blockNumber = web3j.ethBlockNumber().send();
+
         return blockNumber.getBlockNumber();
+
     }
 
     /**
