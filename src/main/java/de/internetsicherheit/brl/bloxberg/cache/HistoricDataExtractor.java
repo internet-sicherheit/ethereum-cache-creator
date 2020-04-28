@@ -1,5 +1,6 @@
 package de.internetsicherheit.brl.bloxberg.cache;
 
+import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithData;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithTransactionCombination;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BloxbergClient;
 import de.internetsicherheit.brl.bloxberg.cache.persistence.EthereumWriter;
@@ -22,10 +23,23 @@ public class HistoricDataExtractor {
 
         this.client = client;
         this.writer = writer;
+
         this.range = range;
 
 
 
+    }
+    public void extractTransWithRange(int start, int stop) throws IOException {
+
+        range(start, stop)
+                .mapToObj(i -> new BlockWithTransactionCombination(BigInteger.valueOf(i), getNumberOfTransactionsInBlockWithRetry(i)))
+                .forEach(this::writeBlock);
+    }
+    public void extractDataWithRange(int start, int stop) throws IOException {
+
+        range(start, stop)
+                .mapToObj(i -> new BlockWithData(BigInteger.valueOf(i), getNumberOfTransactionsInBlockWithRetry(i)))
+                .forEach(this::writeBlockWithData);
     }
 
     /**
@@ -45,6 +59,7 @@ public class HistoricDataExtractor {
      *
      * @throws IOException exception when connection to blockchain cannot be established
      */
+
     public void extractAllData() throws IOException {
         range(0, client.getCurrentBlockNumber().intValue())
                 .mapToObj(i -> new BlockWithTransactionCombination(BigInteger.valueOf(i), getNumberOfTransactionsInBlockWithRetry(i)))
@@ -80,6 +95,13 @@ public class HistoricDataExtractor {
     private void writeBlock(BlockWithTransactionCombination comb) {
         try {
             writer.writeBlockWithTransactions(comb);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void writeBlockWithData(BlockWithData comb) {
+        try {
+            writer.writeBlockWithData(comb);
         } catch (IOException e) {
             e.printStackTrace();
         }

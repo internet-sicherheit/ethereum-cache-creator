@@ -3,6 +3,7 @@ package de.internetsicherheit.brl.bloxberg.cache.ethereum;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
+import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
 import org.web3j.protocol.http.HttpService;
@@ -26,6 +27,7 @@ public class BloxbergClient {
 
         EthBlockNumber blockNumber = web3j.ethBlockNumber().send();
 
+
         return blockNumber.getBlockNumber();
 
     }
@@ -42,5 +44,10 @@ public class BloxbergClient {
         Request<?, EthGetBlockTransactionCountByNumber> request = web3j.ethGetBlockTransactionCountByNumber(DefaultBlockParameter.valueOf(block));
         EthGetBlockTransactionCountByNumber transactionCountByNumber = request.send();
         return transactionCountByNumber.getTransactionCount().intValue();
+    }
+    public EthBlock getEthBlock(BigInteger block) throws IOException {
+
+        return web3j.ethGetBlockByNumber(DefaultBlockParameter.valueOf(block), true).send();
+
     }
 }

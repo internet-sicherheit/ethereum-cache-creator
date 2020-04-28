@@ -1,6 +1,5 @@
 package de.internetsicherheit.brl.bloxberg.cache.persistence;
 
-import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithData;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithTransactionCombination;
 
 import java.io.IOException;
@@ -8,11 +7,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-public class EthereumWriter {
+public class EthereumJsonWriter {
 
     private Path outputFilePath;
 
-    public EthereumWriter(Path dir, String filename) {
+    public EthereumJsonWriter(Path dir, String filename) {
         outputFilePath = dir.resolve(filename);
     }
 
@@ -22,11 +21,6 @@ public class EthereumWriter {
      * @throws IOException exception when writing fails
      */
     public void writeBlockWithTransactions(BlockWithTransactionCombination bwtc) throws IOException {
-        Files.writeString(outputFilePath,  bwtc.blockNumber + ","
-                + bwtc.transactionCount + "\n", StandardOpenOption.APPEND, StandardOpenOption.CREATE);
-
-    }
-    public void writeBlockWithData(BlockWithData bwtc) throws IOException {
         Files.writeString(outputFilePath,  bwtc.blockNumber + ","
                 + bwtc.transactionCount + "\n", StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 

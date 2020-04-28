@@ -38,6 +38,9 @@ public class HistoricDataVisualizer extends Application {
 
         // setup
 
+        // should not show up in gui
+        String filename = "ExtractedData5.txt";
+
         // change to inputfield
         // from current block backwards -  does this make sense?
         int limit = 10000;
@@ -50,30 +53,32 @@ public class HistoricDataVisualizer extends Application {
 
         // change to inputfield
         // max value in file: 5342081, use historicDataExtractor to generate/modify file
-        int groupsize = 100000;
+        int groupsize = 1000;
 
         // change to inputfield or dropdown menu
         client = new BloxbergClient(ETHEREUM_NETWORK);
         // add inputfield for the file name.
-        writer = new EthereumWriter(Path.of(OUTPUTDIRECTORY), "ExtractedData3.txt");
-        BlockAggregator dbs = initDataBlockSummerizer();
+        // original: writer = new EthereumWriter(Path.of(OUTPUTDIRECTORY), filename);
+        writer = new EthereumWriter(Path.of(OUTPUTDIRECTORY), filename);
+        BlockAggregator dbs = initDataBlockSummerizer(filename);
+        TestCenter testCenter = new TestCenter(client);
+        testCenter.extrahiereJsonObject(1234);
 
+        //extract (limit not used atm)
+        //HistoricDataExtractor extractor = new HistoricDataExtractor(client, writer, limit);
+        //extractor.extractDataWithRange(0, 1);
+        /*TO DO: autoextract = readlastline --> getLastBlocknumberInFile --> extract from lastBlocknumberInFile to
+        current blocknumber --> writeNewLines*/
 
-       /* //extract
-        HistoricDataExtractor extractor = new HistoricDataExtractor(client, writer, range);
-        *//*extractor.extractAllData();
-         TO DO: autoextract = readlastline --> getLastBlocknumberInFile --> extract from lastBlocknumberInFile to
-         current blocknumber --> writeNewLines
-        */
 
          //visualize
 
-        ArrayList<BlockGroup> blockGroups = dbs.addGroupTransactions(start, limit,1000);
+        //ArrayList<BlockGroup> blockGroups = dbs.addGroupTransactions(start, limit,groupsize);
 
-        primaryStage.setTitle("Historic Data Visualizer");
-        primaryStage.setScene(generateLineChart(blockGroups));
+        //primaryStage.setTitle("Historic Data Visualizer");
+        //primaryStage.setScene(generateLineChart(blockGroups));
 
-        primaryStage.show();
+        //primaryStage.show();
 
 
     }
@@ -126,9 +131,9 @@ public class HistoricDataVisualizer extends Application {
      * the range is specified in the method summerizeData(start, end, groupSize)
      * @return the DataBlockSummerizer
      */
-    private BlockAggregator initDataBlockSummerizer() {
+    private BlockAggregator initDataBlockSummerizer(String filename) {
 
-        Path workDir= Paths.get((OUTPUTDIRECTORY) + "ExtractedData3.txt");
+        Path workDir= Paths.get((OUTPUTDIRECTORY) + filename);
         System.out.println("workdir: " + workDir);
         CacheFileReader cfr = new CacheFileReader(workDir);
         return new BlockAggregator(cfr);
