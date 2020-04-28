@@ -12,6 +12,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,7 +41,7 @@ public class HistoricDataVisualizer extends Application {
 
         // should not show up in gui
         String filename = "ExtractedData5.txt";
-
+        String filename2 = "extractedData6.json";
         // change to inputfield
         // from current block backwards -  does this make sense?
         int limit = 10000;
@@ -61,8 +62,8 @@ public class HistoricDataVisualizer extends Application {
         // original: writer = new EthereumWriter(Path.of(OUTPUTDIRECTORY), filename);
         writer = new EthereumWriter(Path.of(OUTPUTDIRECTORY), filename);
         BlockAggregator dbs = initDataBlockSummerizer(filename);
-        TestCenter testCenter = new TestCenter(client);
-        testCenter.extrahiereJsonObject(1234);
+        TestCenter testCenter = new TestCenter(client, new File(OUTPUTDIRECTORY + "extractedData6.json"));
+        testCenter.generateJsonFile(0, 10000);
 
         //extract (limit not used atm)
         //HistoricDataExtractor extractor = new HistoricDataExtractor(client, writer, limit);
