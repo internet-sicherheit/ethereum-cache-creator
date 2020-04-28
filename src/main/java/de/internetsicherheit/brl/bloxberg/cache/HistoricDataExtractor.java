@@ -38,8 +38,8 @@ public class HistoricDataExtractor {
     public void extractDataWithRange(int start, int stop) throws IOException {
 
         range(start, stop)
-                .mapToObj(i -> new BlockWithData(BigInteger.valueOf(i), getNumberOfTransactionsInBlockWithRetry(i)))
-                .forEach(this::writeBlockWithData);
+                .mapToObj(i -> new BlockWithTransactionCombination(BigInteger.valueOf(i), getNumberOfTransactionsInBlockWithRetry(i)))
+                .forEach(this::writeBlock);
     }
 
     /**

@@ -27,8 +27,8 @@ public class EthereumWriter {
 
     }
     public void writeBlockWithData(BlockWithData bwtc) throws IOException {
-        Files.writeString(outputFilePath,  bwtc.blockNumber + ","
-                + bwtc.transactionCount + "\n", StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+        Files.writeString(outputFilePath,  ","
+                +"\n", StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 
     }
 }

@@ -1,9 +1,12 @@
 package de.internetsicherheit.brl.bloxberg.cache.gui;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithData;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BloxbergClient;
 import de.internetsicherheit.brl.bloxberg.cache.persistence.EthereumWriter;
 import org.web3j.protocol.core.methods.response.EthBlock;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 
@@ -21,9 +24,11 @@ public class TestCenter {
     public void extrahiereJsonObject(int blockNumber) {
         BigInteger blockBigInteger = BigInteger.valueOf(blockNumber);
         try {
-            EthBlock ethBlock = client.getEthBlock(blockBigInteger);
+            EthBlock.Block ethBlock = client.getEthBlock(blockBigInteger).getBlock();
 
-            System.out.println("something else: " + ethBlock.getRawResponse());
+            BlockWithData bwd = new BlockWithData(ethBlock);
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.writeValue(new File(OUTPUTDIRECTORY + "extractedData6.json"), bwd);
         } catch (IOException e) {
             System.out.println("couldnt extract data: " + e);
         }
