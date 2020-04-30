@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class ReducedTransObjectArray {
 
     /**
-     * a simple custom Datatype that represents a combination of a blocknumber and the corresponding transactioncount
-          */
+     * not being used atm. ignore for now
+     */
     public ArrayList<String> fromAddress;
     public ArrayList<String> toAddress;
 
