@@ -1,7 +1,7 @@
 
 # install lib
 
-install.packages("rjson")
+if (!suppressWarnings(require(rjson))) install.packages("rjson") 
 install.packages("igraph")
 
 library("rjson")
