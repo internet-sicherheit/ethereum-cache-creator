@@ -14,7 +14,7 @@ library("jsonlite")
 
 #import json file from local machine
 
-json_file <- "~/data/network_analysis/trans_mod.json"
+json_file <- "trans_mod.json"
 
 json_data <- jsonlite::fromJSON( json_file )
 summary(json_data)
