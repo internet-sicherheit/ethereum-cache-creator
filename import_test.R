@@ -1,24 +1,29 @@
-
 # install lib
 
-if (!suppressWarnings(require(rjson))) install.packages("rjson") 
-if (!suppressWarnings(require(igraph))) install.packages("igraph") 
+if (!suppressWarnings(require(rjson))) install.packages("rjson")
+if (!suppressWarnings(require(igraph))) install.packages("igraph")
+if (!suppressWarnings(require(dplyr))) install.packages("dplyr")
+if (!suppressWarnings(require(jsonlite))) install.packages("jsonlite")
 
 library("rjson")
 library("igraph")
+library("dplyr")
+library("jsonlite")
+
+
 
 #import json file from local machine
 
 json_file <- "~/data/network_analysis/trans_mod.json"
 
-json_data <- fromJSON(file=json_file)
-
-dat <- json_data
+json_data <- jsonlite::fromJSON( json_file )
+summary(json_data)
 
 transaction <- data.frame(
-  from=c (dat$fromAddress),
-  to=c(dat$toAddress)
+  from=c (json_data$fromAddress),
+  to=c (json_data$toAddress)
 )
+
 
 network <- graph_from_data_frame(d=transaction, directed=F)
 deg <- degree(network, mode="all")
