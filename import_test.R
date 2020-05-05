@@ -2,7 +2,7 @@
 # install lib
 
 if (!suppressWarnings(require(rjson))) install.packages("rjson") 
-install.packages("igraph")
+if (!suppressWarnings(require(igraph))) install.packages("igraph") 
 
 library("rjson")
 library("igraph")
