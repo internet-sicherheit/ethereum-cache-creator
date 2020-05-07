@@ -34,28 +34,24 @@ public class TestCenter {
 
         FileWriter fileWriter = new FileWriter(outputfile, true);
         ObjectMapper objectMapper = new ObjectMapper();
-        //ReducedTransObjectArray rdoa = new ReducedTransObjectArray();
+        
         SequenceWriter seqWriter = objectMapper.writer().writeValuesAsArray(fileWriter);
         for (int i = start; start <= stop; start ++) {
             writeOutTransactions(start, seqWriter);
         }
         seqWriter.close();
-        //objectMapper.writeValue(outputfile, rdoa);
-
+        
     }
 
     public void writeOutTransactions(int blockNumber, SequenceWriter seqWriter) throws IOException {
+        
         BigInteger blockBigInteger = BigInteger.valueOf(blockNumber);
-
-        EthBlock.Block ethBlock = client.getEthBlock(blockBigInteger).getBlock();
-        //BlockWithData bwd = new BlockWithData(ethBlock);
-
+        EthBlock.Block ethBlock = client.getEthBlock(blockBigInteger).getBlock();       
         List transList = ethBlock.getTransactions();
         ListIterator it = transList.listIterator();
+        
         while (it.hasNext()) {
-            seqWriter.write(new ReducedTransObject((Transaction) it.next()));
-            //rdoa.addTransaction((Transaction) it.next());
-
+            seqWriter.write(new ReducedTransObject((Transaction) it.next()));            
         }
     }
 }
