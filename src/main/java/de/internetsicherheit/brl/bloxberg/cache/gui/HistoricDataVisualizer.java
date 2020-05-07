@@ -62,6 +62,8 @@ public class HistoricDataVisualizer extends Application {
         // original: writer = new EthereumWriter(Path.of(OUTPUTDIRECTORY), filename);
         writer = new EthereumWriter(Path.of(OUTPUTDIRECTORY), filename);
         BlockAggregator dbs = initDataBlockSummerizer(filename);
+
+
         TestCenter testCenter = new TestCenter(client, new File(OUTPUTDIRECTORY + "transactionsFrom100kBlocks2.json"));
         testCenter.generateJsonFile(0, 1000);
 
