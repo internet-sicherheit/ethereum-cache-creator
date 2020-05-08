@@ -15,32 +15,34 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.ListIterator;
 
-public class TestCenter {
+public class BlockDataExtractor {
 
     private BloxbergClient client;
     private EthereumWriter writer;
     private final String ETHEREUM_NETWORK = "https://core.bloxberg.org";
     private final String OUTPUTDIRECTORY = System.getProperty("user.dir") + "/output/";
     private File outputfile;
+    private int start;
+    private int stop;
 
-    public TestCenter(BloxbergClient client, File outputfile) {
-        this.client = client;
-        this.outputfile = outputfile;
+    public BlockDataExtractor(String[] args) throws IOException {
 
+        this.client = new BloxbergClient(args[0]);
+        this.outputfile = new File(OUTPUTDIRECTORY + args[1]);
+        this.start = Integer.parseInt(args[2]);
+        this.stop = Integer.parseInt(args[3]);
 
     }
 
-    public void generateJsonFile(int start, int stop) throws IOException {
+    public void generateJsonFile() throws IOException {
 
         FileWriter fileWriter = new FileWriter(outputfile, true);
         ObjectMapper objectMapper = new ObjectMapper();
-        //ReducedTransObjectArray rdoa = new ReducedTransObjectArray();
         SequenceWriter seqWriter = objectMapper.writer().writeValuesAsArray(fileWriter);
         for (int i = start; start <= stop; start ++) {
             writeOutTransactions(start, seqWriter);
         }
         seqWriter.close();
-        //objectMapper.writeValue(outputfile, rdoa);
 
     }
 
@@ -48,13 +50,11 @@ public class TestCenter {
         BigInteger blockBigInteger = BigInteger.valueOf(blockNumber);
 
         EthBlock.Block ethBlock = client.getEthBlock(blockBigInteger).getBlock();
-        //BlockWithData bwd = new BlockWithData(ethBlock);
 
         List transList = ethBlock.getTransactions();
         ListIterator it = transList.listIterator();
         while (it.hasNext()) {
             seqWriter.write(new ReducedTransObject((Transaction) it.next()));
-            //rdoa.addTransaction((Transaction) it.next());
 
         }
     }

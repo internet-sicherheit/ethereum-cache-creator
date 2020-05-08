@@ -42,6 +42,6 @@
         <TextField fx:id="endInput" prefWidth="100.0"/>
 
         <Button fx:id="fileBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false"
-                onAction="#createJson" text="Create Json-File" textAlignment="CENTER"/>
+                onAction="#transferInput" text="Create Json-File" textAlignment="CENTER"/>
     </children>
 </VBox>
