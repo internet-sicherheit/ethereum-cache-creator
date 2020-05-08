@@ -3,6 +3,7 @@
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 <?import java.lang.String?>
 <VBox fx:id="vbox" layoutX="10.0" layoutY="10.0" prefHeight="600.0" prefWidth="800.0" spacing="10"
       xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
@@ -16,8 +17,11 @@
         -fx-border-color: blue;
     </style>
     <children>
-        <Label fx:id="infoText" alignment="CENTER" cache="true" cacheHint="SCALE" prefHeight="30.0"
+
+        <Label fx:id="infoText" alignment="CENTER_LEFT" cache="true" cacheHint="SCALE" prefHeight="30.0"
                prefWidth="200.0" text="Ethereum Cache Creator" textAlignment="LEFT"/>
+        <Text wrappingWidth="400">This Program extracts Transaction-Objects (containing 2 Addresses) from the network specified
+            below and writes them out into a Json-File inside the output folder.</Text>
         <Label fx:id="pathLabel" alignment="CENTER_LEFT" cache="true" cacheHint="SCALE" prefHeight="30.0"
                prefWidth="200.0" text="Blockchain URL:" textAlignment="LEFT"/>
         <ComboBox fx:id="urlbox" layoutX="15.0" layoutY="33.0" prefWidth="200.0" promptText="choose URL">
@@ -27,13 +31,17 @@
                 </FXCollections>
             </items>
         </ComboBox>
+        <Label fx:id="fileNameLabel" alignment="CENTER_LEFT" cache="true" cacheHint="SCALE" prefHeight="30.0"
+               prefWidth="300.0" text="Filename:" textAlignment="LEFT"/>
+        <TextField fx:id="fileNameInput" prefWidth="100.0"/>
         <Label fx:id="startLabel" alignment="CENTER_LEFT" cache="true" cacheHint="SCALE" prefHeight="30.0"
-               prefWidth="200.0" text="Start Node:" textAlignment="LEFT"/>
+               prefWidth="300.0" text="Starting Blocknumber (e.g. 0): " textAlignment="LEFT"/>
+        <TextField fx:id="startInput" prefWidth="100.0"/>
         <Label fx:id="endLabel" alignment="CENTER_LEFT" cache="true" cacheHint="SCALE" prefHeight="30.0"
-               prefWidth="200.0" text="Start Node:" textAlignment="LEFT"/>
-        <TextField fx:id="endText" prefWidth="100.0"/>
+               prefWidth="300.0" text="Ending Blocknumber (e.g. 5000000):" textAlignment="LEFT"/>
+        <TextField fx:id="endInput" prefWidth="100.0"/>
 
         <Button fx:id="fileBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false"
-                onAction="#printOutput" text="Weiter" textAlignment="CENTER"/>
+                onAction="#transferInput" text="Create Json-File" textAlignment="CENTER"/>
     </children>
 </VBox>
