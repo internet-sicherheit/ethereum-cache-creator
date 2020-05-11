@@ -14,7 +14,7 @@ library("jsonlite")
 
 #import json file from local machine
 
-json_file <- "transaction_from_to.json"
+json_file <- "extract.json"
 
 json_data <- jsonlite::fromJSON( json_file )
 summary(json_data)
