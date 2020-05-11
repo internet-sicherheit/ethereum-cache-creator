@@ -27,12 +27,12 @@ transaction <- data.frame(
 #undirected
 network <- graph_from_data_frame(d = transaction, directed=F)
 deg <- degree(network, mode="all")
-plot(network, vertex.size=deg*0.1, vertex.color=rgb(0.1,0.7,0.8,0.5) )
+plot(network, vertex.size=deg*0.1, vertex.color=rgb(0.1,0.7,0.8,0.5), vertex.label.cex = 0.5  )
 
 #Directed
 network <- graph_from_data_frame(d=transaction, directed=T)
 deg <- degree(network, mode="all")
-plot(network, vertex.size=deg*0.1, vertex.color=rgb(0.1,0.7,0.8,0.5) )
+plot(network, vertex.size=deg*0.1, vertex.color=rgb(0.1,0.7,0.8,0.5), vertex.label.cex = 0.5  )
 
 #number of verticies in network
 gorder(network)
