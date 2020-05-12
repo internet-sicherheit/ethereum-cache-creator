@@ -64,9 +64,6 @@ public class HistoricDataVisualizer extends Application {
         BlockAggregator dbs = initDataBlockSummerizer(filename);
 
 
-        TestCenter testCenter = new TestCenter(client, new File(OUTPUTDIRECTORY + "transactionsFrom100kBlocks2.json"));
-        testCenter.generateJsonFile(0, 1000);
-
         //extract (limit not used atm)
         //HistoricDataExtractor extractor = new HistoricDataExtractor(client, writer, limit);
         //extractor.extractDataWithRange(0, 1);
