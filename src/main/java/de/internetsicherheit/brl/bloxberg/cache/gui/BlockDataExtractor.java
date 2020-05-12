@@ -28,7 +28,7 @@ public class BlockDataExtractor {
     public BlockDataExtractor(String[] args) throws IOException {
 
         this.client = new BloxbergClient(args[0]);
-        this.outputfile = new File(OUTPUTDIRECTORY + args[1]);
+        this.outputfile = new File(OUTPUTDIRECTORY + args[1] + ".json");
         this.start = Integer.parseInt(args[2]);
         this.stop = Integer.parseInt(args[3]);
 

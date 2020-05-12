@@ -68,6 +68,7 @@ public class FxmlController {
         input[1] = fileName;
         input[2] = startInput.getText();
         input[3] = endInput.getText();
+        input[4] = "gui";
 
         logicController.createJson(input);
     }
