@@ -3,6 +3,7 @@
 #https://datawookie.netlify.app/blog/2018/01/an-ethereum-package-for-r/
 
 if (!suppressWarnings(require(ether))) install.packages("ether")
+library("ether")
 
 #access bloxberg data
 set_rpc_address("https://core.bloxberg.org")
