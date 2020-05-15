@@ -1,4 +1,6 @@
 # ethereum-cache-creator
+## What does the program do?
+The program extracts data from an ethereum based blockchain. In its current iteration it only extracts the sender-address (*from_address*) and receiver-address (*to_address*) from every transaction within every block that is looked into. This program can extract data from the entire blockchain history.
 ## How to use program in the current iteration
 * download the [artifact](https://github.com/internet-sicherheit/ethereum-cache-creator/actions/runs/104782193)
 * unpack zip with a extractor of your choice, I would recommend [7zip](https://www.7-zip.de/).
