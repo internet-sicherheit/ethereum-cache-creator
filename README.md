@@ -13,6 +13,8 @@ Example:
 ```
 java -jar BloxbergCacheCreator.jar --filename=my_file_name --stop=300
 ```
+Windows:
+BloxbergCacheCreator.jar <arguments>
 
 The list of additional command line arguments, if required.
 
@@ -35,3 +37,4 @@ indicator | value | defaults
 
 - Requires java 14.
 - GUI might only work on Linux.
+- Windows shell **does not show http requests**
