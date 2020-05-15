@@ -4,16 +4,21 @@ The program extracts data from an ethereum based blockchain. In its current iter
 ## How to use program in the current iteration
 * Download the [artifact](https://github.com/internet-sicherheit/ethereum-cache-creator/actions/runs/104782193)
 * Extract the zip file
-* open folder/directory in terminal
+* Open the extracted directory in a terminal
 * Execute the program:
 ```
 java -jar BloxbergCacheCreator.jar <arguments>
 ```
+Example:
+```
+java -jar BloxbergCacheCreator.jar --filename=my_file_name --stop=300
+```
+
 The list of additional command line arguments, if required.
 
 indicator | value | defaults
 ----------- | ----------------- | --------------
---ui=gui      | to run with GUI | *no default*
+--ui=gui      | to run with GUI | cli
 --url=     | the url of the client | https://core.bloxberg.org
 --filename= | the name of the file | transactions_from_to
 --start=  | first block to extract data from | 0
@@ -21,7 +26,7 @@ indicator | value | defaults
 
 **Notes**
 
-- File will appear in folder "output".
-- .json will be added automatically to filename.
-- Start and stop need to be numbers between 0 and 6000000.
+- The result file will appear in a newly created directory `output`
+- A `.json` suffix will be added automatically to the specified filename.
+- Start and stop need to be numbers between 0 and the blocknumber of the latest block of the specified network.
 - Stop needs to be higher than start.    
