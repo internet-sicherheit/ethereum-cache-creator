@@ -28,27 +28,26 @@ public class Launcher {
         parsedArgs[4] = "cli";
         for (int i = 0; i < args.length; i++) {
             String[] parts;
-            if (args[i].contains("--ui=")) {
+            if(args[i].contains("=")) {
                 parts = args[i].split("=");
-                parsedArgs[4] = parts[parts.length - 1];
+                switch (parts[0]) {
+                    case "--ui":
+                        parsedArgs[4] = parts[parts.length -1];
+                        break;
+                    case "--url":
+                        parsedArgs[0] = parts[parts.length -1];
+                        break;
+                    case "--filename":
+                        parsedArgs[1] = parts[parts.length -1];
+                        break;
+                    case "--start":
+                        parsedArgs[2] = parts[parts.length -1];
+                        break;
+                    case "--stop":
+                        parsedArgs[3] = parts[parts.length -1];
+                        break;
+                }
             }
-            if (args[i].contains("--url=")) {
-                parts = args[i].split("=");
-                parsedArgs[0] = parts[parts.length - 1];
-            }
-            if (args[i].contains("--filename=")) {
-                parts = args[i].split("=");
-                parsedArgs[1] = parts[parts.length - 1];
-            }
-            if (args[i].contains("--start=")) {
-                parts = args[i].split("=");
-                parsedArgs[2] = parts[parts.length - 1];
-            }
-            if (args[i].contains("--stop=")) {
-                parts = args[i].split("=");
-                parsedArgs[3] = parts[parts.length - 1];
-            }
-
 
         }
         return parsedArgs;

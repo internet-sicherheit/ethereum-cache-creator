@@ -25,6 +25,7 @@ public class BlockDataExtractor {
     private File outputfile;
     private int start;
     private int stop;
+    private String filename;
 
     public BlockDataExtractor(String[] args) throws IOException {
 
@@ -33,15 +34,18 @@ public class BlockDataExtractor {
         if (!outputdirectory.exists()) {
             outputdirectory.mkdir();
         }
-        this.outputfile = new File(OUTPUTDIRECTORYNAME + args[1] + ".json");
+        filename = args[1];
+        this.outputfile = new File(OUTPUTDIRECTORYNAME + filename + ".json");
         this.start = Integer.parseInt(args[2]);
         this.stop = Integer.parseInt(args[3]);
 
     }
 
     public void generateJsonFile() throws IOException {
-
-        FileWriter fileWriter = new FileWriter(outputfile, true);
+        if(outputfile.delete()) {
+            outputfile = new File(OUTPUTDIRECTORYNAME + filename + ".json");
+        }
+        FileWriter fileWriter = new FileWriter(outputfile, false);
         ObjectMapper objectMapper = new ObjectMapper();
         SequenceWriter seqWriter = objectMapper.writer().writeValuesAsArray(fileWriter);
         for (int i = start; start <= stop; start ++) {
