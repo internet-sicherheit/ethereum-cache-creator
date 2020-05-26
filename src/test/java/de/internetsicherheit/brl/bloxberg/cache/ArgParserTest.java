@@ -14,7 +14,7 @@ public class ArgParserTest {
         String[] args = new String[5];
         // defaults
         args[0] = "--url=https://some.kind.of.url";
-        args[1] = "--filename=some_outputgit_file";
+        args[1] = "--filename=some_output_file";
         args[2] = "--start=13";
         args[3] = "--stop=14";
         args[4] = "--ui=gui";
