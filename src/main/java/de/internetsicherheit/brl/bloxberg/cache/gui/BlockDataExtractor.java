@@ -42,9 +42,7 @@ public class BlockDataExtractor {
     }
 
     public void generateJsonFile() throws IOException {
-        if(outputfile.delete()) {
-            outputfile = new File(OUTPUTDIRECTORYNAME + filename + ".json");
-        }
+        outputfile.delete();
         FileWriter fileWriter = new FileWriter(outputfile, false);
         ObjectMapper objectMapper = new ObjectMapper();
         SequenceWriter seqWriter = objectMapper.writer().writeValuesAsArray(fileWriter);
