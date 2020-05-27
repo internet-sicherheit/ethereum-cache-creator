@@ -12,7 +12,7 @@ public class ArgParserTest {
         ArgParser parser = new ArgParser();
 
         String[] args = new String[5];
-        // defaults
+        
         args[0] = "--url=https://some.kind.of.url";
         args[1] = "--filename=some_output_file";
         args[2] = "--start=13";
