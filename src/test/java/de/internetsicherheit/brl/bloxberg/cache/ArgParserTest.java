@@ -27,10 +27,7 @@ public class ArgParserTest {
         Assertions.assertEquals("13", parsedArgs[2]);
         Assertions.assertEquals("14", parsedArgs[3]);
         Assertions.assertEquals("gui", parsedArgs[4]);
-        for(int i = 0; i < parsedArgs.length; i++) {
-            System.out.println(parsedArgs[i]);
-        }
-
+        
     }
 
 
