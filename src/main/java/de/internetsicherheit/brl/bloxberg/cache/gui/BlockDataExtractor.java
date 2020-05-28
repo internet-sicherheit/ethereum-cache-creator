@@ -6,14 +6,13 @@ import de.internetsicherheit.brl.bloxberg.cache.ethereum.BloxbergClient;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.ReducedTransObject;
 import de.internetsicherheit.brl.bloxberg.cache.persistence.EthereumWriter;
 import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.core.methods.response.Transaction;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 public class BlockDataExtractor {
 
