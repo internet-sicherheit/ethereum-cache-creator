@@ -58,11 +58,11 @@ public class BlockDataExtractor {
 
         EthBlock.Block ethBlock = client.getEthBlock(blockBigInteger).getBlock();
 
-        List transList = ethBlock.getTransactions();
-        ListIterator<Transaction> it = transList.listIterator();
-        while (it.hasNext()) {
-            seqWriter.write(new ReducedTransObject(it.next(), ethBlock));
-
-        }
+        List<ReducedTransObject> convertedObjects = ethBlock.getTransactions()
+                .stream()
+                .map(it -> new ReducedTransObject((EthBlock.TransactionObject) it, ethBlock))
+                .collect(Collectors.toList());
+        
+        seqWriter.writeAll(convertedObjects);
     }
 }
