@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ public class BlockDataExtractor {
     private int stop;
     private String filename;
 
-    public BlockDataExtractor(String[] args) throws IOException {
+    public BlockDataExtractor(String[] args) {
 
         this.client = new BloxbergClient(args[0]);
         outputdirectory = new File(OUTPUTDIRECTORYNAME);
@@ -45,14 +46,19 @@ public class BlockDataExtractor {
         FileWriter fileWriter = new FileWriter(outputfile, false);
         ObjectMapper objectMapper = new ObjectMapper();
         SequenceWriter seqWriter = objectMapper.writer().writeValuesAsArray(fileWriter);
+        List<List> allUncles = new ArrayList<>();
         for (int i = start; start <= stop; start ++) {
-            writeOutTransactions(start, seqWriter);
+            List unclesPerBlock = writeOutTransactions(start, seqWriter);
+            if (!unclesPerBlock.isEmpty()) {
+                allUncles.add(unclesPerBlock);
+            }
         }
+        System.out.println(allUncles.isEmpty() + "\n" + allUncles);
         seqWriter.close();
 
     }
 
-    public void writeOutTransactions(int blockNumber, SequenceWriter seqWriter) throws IOException {
+    public List writeOutTransactions(int blockNumber, SequenceWriter seqWriter) throws IOException {
         BigInteger blockBigInteger = BigInteger.valueOf(blockNumber);
 
         EthBlock.Block ethBlock = client.getEthBlock(blockBigInteger).getBlock();
@@ -63,5 +69,11 @@ public class BlockDataExtractor {
                 .collect(Collectors.toList());
         
         seqWriter.writeAll(convertedObjects);
+
+        return convertedObjects
+                .stream()
+                .filter(e -> !e.uncles.isEmpty())
+                .map(ReducedTransObject::getUncles)
+                .collect(Collectors.toList());
     }
 }
