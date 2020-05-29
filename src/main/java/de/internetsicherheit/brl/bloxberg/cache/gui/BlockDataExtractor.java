@@ -18,8 +18,6 @@ import java.util.ListIterator;
 public class BlockDataExtractor {
 
     private BloxbergClient client;
-    private EthereumWriter writer;
-    private final String ETHEREUM_NETWORK = "https://core.bloxberg.org";
     private final String OUTPUTDIRECTORYNAME = System.getProperty("user.dir") + "/output/";
     private File outputdirectory;
     private File outputfile;
