@@ -20,6 +20,7 @@ public class BloxbergClient {
 
     /**
      * the bloxbergclient. any other blockchain can be used aswell
+     *
      * @param networkUrl the url of the blockchain
      */
     public BloxbergClient(String networkUrl) {
@@ -35,6 +36,7 @@ public class BloxbergClient {
     /**
      * sends a request to the blockchain to extract the number of transactions in a single block.
      * this method is quite timeconsuming.
+     *
      * @param block the blocknumber
      * @return the transactioncount
      * @throws IOException connection to client lost/cannot be established
@@ -56,3 +58,4 @@ public class BloxbergClient {
         return this.blockWithData;
     }
 }
+
