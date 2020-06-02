@@ -2,6 +2,7 @@ package de.internetsicherheit.brl.bloxberg.cache.gui;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
+import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithData;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BloxbergClient;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.ReducedTransObject;
 import de.internetsicherheit.brl.bloxberg.cache.persistence.EthereumWriter;
@@ -26,7 +27,6 @@ public class BlockDataExtractor {
     private String filename;
 
     public BlockDataExtractor(String[] args) throws IOException {
-
         this.client = new BloxbergClient(args[0]);
         outputdirectory = new File(OUTPUTDIRECTORYNAME);
         if (!outputdirectory.exists()) {
@@ -36,7 +36,6 @@ public class BlockDataExtractor {
         this.outputfile = new File(OUTPUTDIRECTORYNAME + filename + ".json");
         this.start = Integer.parseInt(args[2]);
         this.stop = Integer.parseInt(args[3]);
-
     }
 
     public void generateJsonFile() throws IOException {
@@ -48,19 +47,15 @@ public class BlockDataExtractor {
             writeOutTransactions(start, seqWriter);
         }
         seqWriter.close();
-
     }
 
     public void writeOutTransactions(int blockNumber, SequenceWriter seqWriter) throws IOException {
         BigInteger blockBigInteger = BigInteger.valueOf(blockNumber);
-
-        EthBlock.Block ethBlock = client.getEthBlock(blockBigInteger).getBlock();
-
-        List transList = ethBlock.getTransactions();
-        ListIterator it = transList.listIterator();
+        BlockWithData block = client.getBlockWithData(blockBigInteger);
+        List transactions = block.getTransactions();
+        ListIterator it = transactions.listIterator();
         while (it.hasNext()) {
             seqWriter.write(new ReducedTransObject((Transaction) it.next()));
-
         }
     }
 }

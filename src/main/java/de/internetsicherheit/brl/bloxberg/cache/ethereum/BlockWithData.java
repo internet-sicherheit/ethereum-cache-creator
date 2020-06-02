@@ -46,4 +46,7 @@ public class BlockWithData {
         this.timestamp = ethBlock.getTimestamp();
     }
 
+    public List getTransactions() {
+        return transactions;
+    }
 }

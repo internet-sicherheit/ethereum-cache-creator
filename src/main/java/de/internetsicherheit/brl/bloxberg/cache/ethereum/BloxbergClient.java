@@ -14,6 +14,9 @@ import java.math.BigInteger;
 public class BloxbergClient {
 
     private final Web3j web3j;
+    private EthBlock rawBlock;
+    private BlockWithData blockWithData;
+
 
     /**
      * the bloxbergclient. any other blockchain can be used aswell
@@ -24,10 +27,7 @@ public class BloxbergClient {
     }
 
     public BigInteger getCurrentBlockNumber() throws IOException {
-
         EthBlockNumber blockNumber = web3j.ethBlockNumber().send();
-
-
         return blockNumber.getBlockNumber();
 
     }
@@ -39,15 +39,20 @@ public class BloxbergClient {
      * @return the transactioncount
      * @throws IOException connection to client lost/cannot be established
      */
-    public int getNumberOfTransactionsInBlock(BigInteger block) throws IOException {
 
+    public int getNumberOfTransactionsInBlock(BigInteger block) throws IOException {
         Request<?, EthGetBlockTransactionCountByNumber> request = web3j.ethGetBlockTransactionCountByNumber(DefaultBlockParameter.valueOf(block));
         EthGetBlockTransactionCountByNumber transactionCountByNumber = request.send();
         return transactionCountByNumber.getTransactionCount().intValue();
     }
-    public EthBlock getEthBlock(BigInteger block) throws IOException {
 
+    private EthBlock getEthBlock(BigInteger block) throws IOException {
         return web3j.ethGetBlockByNumber(DefaultBlockParameter.valueOf(block), true).send();
+    }
 
+    public BlockWithData getBlockWithData(BigInteger block) throws IOException {
+        this.rawBlock = this.getEthBlock(block);
+        this.blockWithData = new BlockWithData(this.rawBlock.getBlock());
+        return this.blockWithData;
     }
 }
