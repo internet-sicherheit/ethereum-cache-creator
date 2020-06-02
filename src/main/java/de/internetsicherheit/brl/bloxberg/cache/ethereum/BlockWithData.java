@@ -1,6 +1,7 @@
 package de.internetsicherheit.brl.bloxberg.cache.ethereum;
 
 import org.web3j.protocol.core.methods.response.EthBlock;
+import org.web3j.protocol.core.methods.response.Transaction;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -23,9 +24,10 @@ public class BlockWithData {
     public BigInteger size;
     public List uncles;
     public BigInteger timestamp;
+
     /**
      * a simple custom Datatype that represents a combination of a blocknumber and the corresponding transactioncount
-          */
+     */
     public BlockWithData(EthBlock.Block ethBlock) {
         this.transactions = ethBlock.getTransactions();
         this.sealFields = ethBlock.getSealFields();
@@ -46,7 +48,7 @@ public class BlockWithData {
         this.timestamp = ethBlock.getTimestamp();
     }
 
-    public List getTransactions() {
+    public List<EthBlock.TransactionResult<Transaction>> getTransactions() {
         return transactions;
     }
 }

@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithData;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BloxbergClient;
-import de.internetsicherheit.brl.bloxberg.cache.ethereum.ReducedTransObject;
-import de.internetsicherheit.brl.bloxberg.cache.persistence.EthereumWriter;
-import org.web3j.protocol.core.methods.response.EthBlock;
+import de.internetsicherheit.brl.bloxberg.cache.ethereum.ReducedTransactionObject;
 import org.web3j.protocol.core.methods.response.Transaction;
 
 import java.io.File;
@@ -52,10 +50,12 @@ public class BlockDataExtractor {
     public void writeOutTransactions(int blockNumber, SequenceWriter seqWriter) throws IOException {
         BigInteger blockBigInteger = BigInteger.valueOf(blockNumber);
         BlockWithData block = client.getBlockWithData(blockBigInteger);
+
         List transactions = block.getTransactions();
+
         ListIterator it = transactions.listIterator();
         while (it.hasNext()) {
-            seqWriter.write(new ReducedTransObject((Transaction) it.next()));
+            seqWriter.write(new ReducedTransactionObject((Transaction) it.next()));
         }
     }
 }
