@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class BlockWithData {
+    private final List<BlockTransaction> blockTransactions;
     private List transactions;
     private List sealFields;
     private String author;
@@ -48,16 +49,21 @@ public class BlockWithData {
         this.size = ethBlock.getSize();
         this.uncles = ethBlock.getUncles();
         this.timestamp = ethBlock.getTimestamp();
+        this.blockTransactions = this.transformTransactions();
+
     }
 
-    public List<BlockTransaction> getTransactions() {
+    private List<BlockTransaction> transformTransactions() {
         List<BlockTransaction> blockTransactions = new ArrayList<BlockTransaction>();
 
-        ListIterator it = transactions.listIterator();
+        ListIterator it = this.transactions.listIterator();
 
         while (it.hasNext()) {
             blockTransactions.add(new BlockTransaction((Transaction) it.next()));
         }
         return blockTransactions;
+    }
+    public List<BlockTransaction> getTransactions() {
+        return this.blockTransactions;
     }
 }
