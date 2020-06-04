@@ -57,5 +57,10 @@ public class BloxbergClient {
         this.blockWithData = new BlockWithData(this.rawBlock.getBlock());
         return this.blockWithData;
     }
+
+    public BigInteger getBlockTimestamp(BigInteger block) throws IOException {
+        BlockWithData blockForTimestamp = this.getBlockWithData(block);
+        return blockForTimestamp.getTimestamp();
+    }
 }
 

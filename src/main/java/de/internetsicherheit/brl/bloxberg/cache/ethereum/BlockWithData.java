@@ -67,4 +67,8 @@ public class BlockWithData {
     public List<BlockTransaction> getTransactions() {
         return this.blockTransactions;
     }
+
+    public BigInteger getTimestamp() {
+        return this.timestamp;
+    }
 }
