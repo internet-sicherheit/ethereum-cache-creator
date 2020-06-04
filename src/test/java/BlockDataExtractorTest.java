@@ -19,8 +19,8 @@ public class BlockDataExtractorTest {
         String[] args = new String[5];
         args[0] = "https://core.bloxberg.org";
         args[1] = "timestamps_test";
-        args[2] = "0";
-        args[3] = "1000";
+        args[2] = "33";
+        args[3] = "34";
         BlockDataExtractor bde = new BlockDataExtractor(args);
 
         // generate Json-File and read it
