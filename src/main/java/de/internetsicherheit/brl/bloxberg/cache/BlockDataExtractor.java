@@ -43,7 +43,7 @@ public class BlockDataExtractor {
         FileWriter fileWriter = new FileWriter(outputfile, false);
         ObjectMapper objectMapper = new ObjectMapper();
         SequenceWriter seqWriter = objectMapper.writer().writeValuesAsArray(fileWriter);
-        for (int i = start; start <= stop; start++) {
+        for (; start <= stop; start++) {
             writeOutTransactions(start, seqWriter);
         }
         seqWriter.close();
