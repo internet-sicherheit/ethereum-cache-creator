@@ -1,10 +1,10 @@
-package de.internetsicherheit.brl.bloxberg.cache.gui;
+package de.internetsicherheit.brl.bloxberg.cache;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockTransaction;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BloxbergClient;
-import de.internetsicherheit.brl.bloxberg.cache.ethereum.ReducedTransactionObject;
+import de.internetsicherheit.brl.bloxberg.cache.ethereum.AddressInformationForJson;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -47,11 +47,11 @@ public class BlockDataExtractor {
 
     public void writeOutTransactions(int blockNumber, SequenceWriter seqWriter) throws IOException {
         BigInteger blockBigInteger = BigInteger.valueOf(blockNumber);
-        List transactions = client.getBlockWithData(blockBigInteger).getTransactions();
+        List<BlockTransaction> transactions = client.getBlockWithData(blockBigInteger).getTransactions();
 
-        ListIterator it = transactions.listIterator();
+        ListIterator<BlockTransaction> it = transactions.listIterator();
         while (it.hasNext()) {
-            seqWriter.write(new ReducedTransactionObject((BlockTransaction) it.next()));
+            seqWriter.write(new AddressInformationForJson(it.next()));
         }
     }
 }

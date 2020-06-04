@@ -56,13 +56,14 @@ public class BlockWithData {
     private List<BlockTransaction> transformTransactions() {
         List<BlockTransaction> blockTransactions = new ArrayList<BlockTransaction>();
 
-        ListIterator it = this.transactions.listIterator();
+        ListIterator<Transaction> it = this.transactions.listIterator();
 
         while (it.hasNext()) {
-            blockTransactions.add(new BlockTransaction((Transaction) it.next()));
+            blockTransactions.add(new BlockTransaction(it.next()));
         }
         return blockTransactions;
     }
+
     public List<BlockTransaction> getTransactions() {
         return this.blockTransactions;
     }

@@ -1,7 +1,5 @@
 package de.internetsicherheit.brl.bloxberg.cache;
 
-import de.internetsicherheit.brl.bloxberg.cache.gui.BlockDataExtractor;
-
 import java.io.IOException;
 
 public class LogicController {
