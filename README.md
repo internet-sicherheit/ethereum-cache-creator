@@ -2,7 +2,7 @@
 ## What does the program do?
 The program extracts data from an ethereum based blockchain and writes out the results in a json-file. In its current iteration it only extracts the sender-address (*from_address*) and receiver-address (*to_address*) from every transaction within every block that is looked into. This program can extract data from the entire blockchain history.
 ## How to use program in the current iteration
-* Download the [artifact](https://github.com/internet-sicherheit/ethereum-cache-creator/actions/runs/104782193)
+* Download the [artifact](https://github.com/internet-sicherheit/ethereum-cache-creator/actions?query=branch%3Amaster)
 * Extract the zip file
 * Open the directory containing the extracted JAR file in a terminal
 * Execute the program:
