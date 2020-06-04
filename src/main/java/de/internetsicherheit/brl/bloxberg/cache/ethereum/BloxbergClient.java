@@ -29,8 +29,12 @@ public class BloxbergClient {
         //WebSocketService wss = new WebSocketService("wss://core.bloxberg.org", false);
 
         WebSocketClient webSocketClient = null;
+        String localParity = "ws://localhost:8546/";
+        String wssWebsockets = "wss://websockets.bloxberg.org:8546/";
+        String httpsWebsockets = "https://websockets.bloxberg.org/";
+        String wsCore = "ws://core.bloxberg.org";
         try {
-            webSocketClient = new WebSocketClient(new URI("ws://core.bloxberg.org"));
+            webSocketClient = new WebSocketClient(new URI(wssWebsockets));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -38,6 +42,7 @@ public class BloxbergClient {
         WebSocketService webSocketService = new WebSocketService(webSocketClient, includeRawResponses);
         try {
             webSocketClient.connectBlocking();
+
             System.out.println("websocket socket: " + webSocketClient.getSocket());
             System.out.println("websocket is open: " + webSocketClient.isOpen());
             web3j2 = Web3j.build(webSocketService);

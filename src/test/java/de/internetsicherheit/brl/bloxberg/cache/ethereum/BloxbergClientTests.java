@@ -18,6 +18,7 @@ public class BloxbergClientTests {
         BloxbergClient client = buildClient();
 
         BigInteger blockNumber = client.getCurrentBlockNumber();
+        System.out.println("current block number: " + blockNumber.intValue());
 
         assertThat(blockNumber).isGreaterThanOrEqualTo(BigInteger.valueOf(5000000L));
     }
