@@ -64,4 +64,8 @@ public class BlockDataExtractor {
         
         seqWriter.writeAll(convertedObjects);
     }
+
+    public File getOutputfile() {
+        return outputfile;
+    }
 }
