@@ -1,17 +1,20 @@
 package de.internetsicherheit.brl.bloxberg.cache.ethereum;
 
 import org.web3j.protocol.core.methods.response.EthBlock;
+import org.web3j.protocol.core.methods.response.EthBlock.TransactionResult;
 import org.web3j.protocol.core.methods.response.Transaction;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 public class BlockWithData {
     private final List<BlockTransaction> blockTransactions;
-    private List transactions;
-    private List sealFields;
+
+    @SuppressWarnings("rawtypes") // we get the raw type from web3j like this
+    private List<TransactionResult> transactions;
+
+    private List<String> sealFields;
     private String author;
     private BigInteger difficulty;
     private String extraData;
@@ -25,7 +28,7 @@ public class BlockWithData {
     private String parentHash;
     private String receiptRoot;
     private BigInteger size;
-    private List uncles;
+    private List<String> uncles;
     private BigInteger timestamp;
 
     /**
@@ -54,14 +57,9 @@ public class BlockWithData {
     }
 
     private List<BlockTransaction> transformTransactions() {
-        List<BlockTransaction> blockTransactions = new ArrayList<BlockTransaction>();
-
-        ListIterator<Transaction> it = this.transactions.listIterator();
-
-        while (it.hasNext()) {
-            blockTransactions.add(new BlockTransaction(it.next()));
-        }
-        return blockTransactions;
+        return this.transactions.stream()
+                .map(t -> new BlockTransaction((Transaction) t))
+                .collect(Collectors.toList());
     }
 
     public List<BlockTransaction> getTransactions() {

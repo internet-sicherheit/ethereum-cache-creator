@@ -1,4 +1,4 @@
-import de.internetsicherheit.brl.bloxberg.cache.gui.BlockDataExtractor;
+import de.internetsicherheit.brl.bloxberg.cache.BlockDataExtractor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +25,7 @@ public class BlockDataExtractorTest {
 
         // generate Json-File and read it
         bde.generateJsonFile();
-        Path outputfile = bde.getOutputfile().toPath();
+        Path outputfile = Path.of(BlockDataExtractor.OUTPUTDIRECTORYNAME,args[1] + ".json");
         List<String> lines = Files.readAllLines(outputfile);
 
         // check if there is a timestamp in the file

@@ -1,4 +1,4 @@
-package de.internetsicherheit.brl.bloxberg.cache.gui;
+package de.internetsicherheit.brl.bloxberg.cache;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
@@ -11,11 +11,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.ListIterator;
 
 public class BlockDataExtractor {
 
-    private final String OUTPUTDIRECTORYNAME = System.getProperty("user.dir") + "/output/";
+    public static final String OUTPUTDIRECTORYNAME = System.getProperty("user.dir") + "/output/";
     private BloxbergClient client;
     private File outputdirectory;
     private File outputfile;
@@ -23,11 +22,12 @@ public class BlockDataExtractor {
     private int stop;
     private String filename;
 
-    public BlockDataExtractor(String[] args) throws IOException {
+    public BlockDataExtractor(String[] args) {
 
         this.client = new BloxbergClient(args[0]);
         outputdirectory = new File(OUTPUTDIRECTORYNAME);
         if (!outputdirectory.exists()) {
+            //noinspection ResultOfMethodCallIgnored
             outputdirectory.mkdir();
         }
         filename = args[1];
@@ -38,6 +38,7 @@ public class BlockDataExtractor {
     }
 
     public void generateJsonFile() throws IOException {
+        //noinspection ResultOfMethodCallIgnored
         outputfile.delete();
         FileWriter fileWriter = new FileWriter(outputfile, false);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -54,9 +55,9 @@ public class BlockDataExtractor {
         BigInteger blockBigInteger = BigInteger.valueOf(blockNumber);
         List<BlockTransaction> transactions = client.getBlockWithData(blockBigInteger).getTransactions();
         BigInteger timestamp = client.getBlockTimestamp(blockBigInteger);
-        ListIterator<BlockTransaction> it = transactions.listIterator();
-        while (it.hasNext()) {
-            seqWriter.write(new InformationForJson(it.next(), timestamp));
+
+        for (BlockTransaction transaction : transactions) {
+            seqWriter.write(new InformationForJson(transaction, timestamp));
         }
     }
 }
