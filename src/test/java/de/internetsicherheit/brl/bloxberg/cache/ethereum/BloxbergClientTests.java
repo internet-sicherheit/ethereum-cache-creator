@@ -16,9 +16,7 @@ public class BloxbergClientTests {
     @Test
     void blockNumber() throws IOException {
         BloxbergClient client = buildClient();
-
         BigInteger blockNumber = client.getCurrentBlockNumber();
-
         assertThat(blockNumber).isGreaterThanOrEqualTo(BigInteger.valueOf(5000000L));
     }
 
@@ -29,11 +27,8 @@ public class BloxbergClientTests {
     @ParameterizedTest
     void transactionsInBlock(int blockNumber, int expectedTransactionCount) throws IOException {
         BloxbergClient client = buildClient();
-
         BigInteger bn = BigInteger.valueOf(blockNumber);
-
         int blockWithTransactionCount = client.getNumberOfTransactionsInBlock(bn);
-
         assertThat(blockWithTransactionCount).isEqualTo(expectedTransactionCount);
     }
 
