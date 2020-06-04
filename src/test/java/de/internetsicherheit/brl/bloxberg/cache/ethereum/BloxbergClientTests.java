@@ -28,7 +28,9 @@ public class BloxbergClientTests {
             )
     @ParameterizedTest
     void transactionsInBlock(int blockNumber, int expectedTransactionCount) throws IOException {
+
         BloxbergClient client = buildClient();
+
 
         BigInteger bn = BigInteger.valueOf(blockNumber);
 
