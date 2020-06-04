@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockTransaction;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BloxbergClient;
-import de.internetsicherheit.brl.bloxberg.cache.ethereum.AddressInformationForJson;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -51,7 +50,7 @@ public class BlockDataExtractor {
 
         ListIterator<BlockTransaction> it = transactions.listIterator();
         while (it.hasNext()) {
-            seqWriter.write(new AddressInformationForJson(it.next()));
+            seqWriter.write(it.next());
         }
     }
 }
