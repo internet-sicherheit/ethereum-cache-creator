@@ -6,14 +6,13 @@ import de.internetsicherheit.brl.bloxberg.cache.ethereum.BloxbergClient;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.ReducedTransObject;
 import de.internetsicherheit.brl.bloxberg.cache.persistence.EthereumWriter;
 import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.core.methods.response.Transaction;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 public class BlockDataExtractor {
 
@@ -56,11 +55,15 @@ public class BlockDataExtractor {
 
         EthBlock.Block ethBlock = client.getEthBlock(blockBigInteger).getBlock();
 
-        List transList = ethBlock.getTransactions();
-        ListIterator it = transList.listIterator();
-        while (it.hasNext()) {
-            seqWriter.write(new ReducedTransObject((Transaction) it.next()));
+        List<ReducedTransObject> convertedObjects = ethBlock.getTransactions()
+                .stream()
+                .map(it -> new ReducedTransObject((EthBlock.TransactionObject) it, ethBlock))
+                .collect(Collectors.toList());
+        
+        seqWriter.writeAll(convertedObjects);
+    }
 
-        }
+    public File getOutputfile() {
+        return outputfile;
     }
 }
