@@ -14,7 +14,6 @@ import java.math.BigInteger;
 public class BloxbergClient {
 
     private final Web3j web3j;
-    private EthBlock rawBlock;
     private Block blockWithData;
 
 
@@ -53,19 +52,13 @@ public class BloxbergClient {
     }
 
     private Block getBlockWithData(BigInteger block) throws IOException {
-        this.rawBlock = this.getEthBlock(block);
-        this.blockWithData = new Block(this.rawBlock.getBlock());
+        EthBlock rawBlock = this.getEthBlock(block);
+        this.blockWithData = new Block(rawBlock.getBlock());
         return this.blockWithData;
     }
 
-    private BigInteger getBlockTimestamp(BigInteger block) throws IOException {
-        Block blockForTimestamp = this.getBlockWithData(block);
-        return blockForTimestamp.getTimestamp();
-    }
-
     public Block getBlock(BigInteger block) throws IOException {
-        this.rawBlock = this.getEthBlock(block);
-        this.blockWithData = new Block(this.rawBlock.getBlock());
+        this.blockWithData = this.getBlockWithData(block);
         return this.blockWithData;
     }
 }

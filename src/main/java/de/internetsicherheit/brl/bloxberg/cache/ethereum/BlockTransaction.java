@@ -11,5 +11,4 @@ public class BlockTransaction {
         this.fromAddress = new TransactionAddress(transaction.getFrom());
         this.toAddress = new TransactionAddress(transaction.getTo());
     }
-
 }

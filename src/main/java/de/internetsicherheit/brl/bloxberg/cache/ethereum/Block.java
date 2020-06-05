@@ -63,10 +63,12 @@ public class Block {
     }
 
     public List<BlockTransaction> getTransactions() {
+
         return this.blockTransactions;
     }
 
     public BigInteger getTimestamp() {
+
         return this.timestamp;
     }
 }

@@ -16,6 +16,4 @@ public class InformationForJson {
         this.fromAddress = blockTransaction.fromAddress.address;
         this.toAddress = blockTransaction.toAddress.address;
     }
-
-
 }
