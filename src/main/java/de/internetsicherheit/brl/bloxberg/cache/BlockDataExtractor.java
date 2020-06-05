@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class BlockDataExtractor {
@@ -49,7 +50,14 @@ public class BlockDataExtractor {
         seqWriter.close();
 
     }
-
+    public void printOutWssTestData() {
+        try {
+            client.getSomeWssTestData();
+        } catch (URISyntaxException | InterruptedException e) {
+            e.printStackTrace();
+            System.out.println("could not print out wss test data. :(");
+        }
+    }
 
     public void writeOutTransactions(int blockNumber, SequenceWriter seqWriter) throws IOException {
         BigInteger blockBigInteger = BigInteger.valueOf(blockNumber);
