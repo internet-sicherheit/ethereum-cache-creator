@@ -30,7 +30,8 @@ public class BloxbergClient {
         web3j = Web3j.build(new HttpService(networkUrl));
 
         try {
-            Web3j web3jwss = buildWssClient();
+            WebSocketListenerMessageCatcher wsl = new WebSocketListenerMessageCatcher();
+            Web3j web3jwss = buildWssClient(wsl);
             System.out.println("successfully built Web3j object with websocket.");
             getSomeTestData(web3jwss);
         } catch (URISyntaxException | InterruptedException | IOException e) {
@@ -38,43 +39,25 @@ public class BloxbergClient {
         }
 
     }
-    public Web3j buildWssClient() throws URISyntaxException, InterruptedException {
+
+    public Web3j buildWssClient(WebSocketListener wsl) throws URISyntaxException, InterruptedException {
         WebSocketClient webSocketClient = null;
         String wssBloxberg = "wss://websockets.bloxberg.org/";
         String wssInfura = "wss://mainnet.infura.io/ws/v3/18fb2fab0e8a4a588c66af7182314a7b";
 
-            webSocketClient = new WebSocketClient(new URI(wssBloxberg));
-            WebSocketListener wsl = new WebSocketListener() {
+        webSocketClient = new WebSocketClient(new URI(wssBloxberg));
 
-                @Override
-                public void onMessage(String message) throws IOException {
-                    /**
-                     * some requests trigger messages others do not.
-                     */
-                    System.out.println(message);
-                }
+        webSocketClient.setListener(wsl);
 
-                @Override
-                public void onError(Exception e) {
-                    System.out.println(e.getCause());
+        System.out.println("websocket connected: " + webSocketClient.connectBlocking());
+        System.out.println("websocket socket: " + webSocketClient.getSocket());
+        System.out.println("websocket Uri: " + webSocketClient.getURI());
+        System.out.println("websocket is open: " + webSocketClient.isOpen());
 
-                }
+        boolean includeRawResponses = false;
+        WebSocketService webSocketService = new WebSocketService(webSocketClient, includeRawResponses);
 
-                @Override
-                public void onClose() {
-                    System.out.println("WebSocketClient closed.");
-                }
-            };
-            webSocketClient.setListener(wsl);
-
-            System.out.println("websocket connected: " + webSocketClient.connectBlocking());
-            System.out.println("websocket socket: " + webSocketClient.getSocket());
-            System.out.println("websocket Uri: " + webSocketClient.getURI());
-            System.out.println("websocket is open: " + webSocketClient.isOpen());
-            boolean includeRawResponses = true;
-            WebSocketService webSocketService = new WebSocketService(webSocketClient, includeRawResponses);
-
-            return Web3j.build(webSocketService);
+        return Web3j.build(webSocketService);
 
     }
 
@@ -113,17 +96,22 @@ public class BloxbergClient {
         BlockWithData blockForTimestamp = this.getBlockWithData(block);
         return blockForTimestamp.getTimestamp();
     }
+
     public void getSomeTestData(Web3j web3jwss) throws IOException {
         Request<?, Web3ClientVersion> request1 = web3jwss.web3ClientVersion();
-
         Request<?, EthGetBlockTransactionCountByNumber> request2 =
-                web3j.ethGetBlockTransactionCountByNumber(DefaultBlockParameter.valueOf(BigInteger.valueOf(34)));
+                web3j.ethGetBlockTransactionCountByNumber(DefaultBlockParameter.valueOf(BigInteger.valueOf(33)));
         Request<?, EthBlockNumber> request3 = web3jwss.ethBlockNumber();
 
         request1.sendAsync();
         // request2 does not trigger a message
         request2.sendAsync();
         request3.sendAsync();
+
+
+        // this gives us the whole transaction data we used to have as a String
+        web3jwss.ethGetBlockByNumber(DefaultBlockParameter.valueOf(BigInteger.valueOf(33)), false)
+                .sendAsync();
     }
 }
 
