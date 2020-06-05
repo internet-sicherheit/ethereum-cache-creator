@@ -8,7 +8,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BlockWithData {
+public class Block {
     private final List<BlockTransaction> blockTransactions;
 
     @SuppressWarnings("rawtypes") // we get the raw type from web3j like this
@@ -34,7 +34,7 @@ public class BlockWithData {
     /**
      * a simple custom Datatype that represents a combination of a blocknumber and the corresponding transactioncount
      */
-    public BlockWithData(EthBlock.Block ethBlock) {
+    public Block(EthBlock.Block ethBlock) {
         this.transactions = ethBlock.getTransactions();
         this.sealFields = ethBlock.getSealFields();
         this.author = ethBlock.getAuthor();

@@ -15,7 +15,7 @@ public class BloxbergClient {
 
     private final Web3j web3j;
     private EthBlock rawBlock;
-    private BlockWithData blockWithData;
+    private Block blockWithData;
 
 
     /**
@@ -52,15 +52,21 @@ public class BloxbergClient {
         return web3j.ethGetBlockByNumber(DefaultBlockParameter.valueOf(block), true).send();
     }
 
-    public BlockWithData getBlockWithData(BigInteger block) throws IOException {
+    private Block getBlockWithData(BigInteger block) throws IOException {
         this.rawBlock = this.getEthBlock(block);
-        this.blockWithData = new BlockWithData(this.rawBlock.getBlock());
+        this.blockWithData = new Block(this.rawBlock.getBlock());
         return this.blockWithData;
     }
 
-    public BigInteger getBlockTimestamp(BigInteger block) throws IOException {
-        BlockWithData blockForTimestamp = this.getBlockWithData(block);
+    private BigInteger getBlockTimestamp(BigInteger block) throws IOException {
+        Block blockForTimestamp = this.getBlockWithData(block);
         return blockForTimestamp.getTimestamp();
+    }
+
+    public Block getBlock(BigInteger block) throws IOException {
+        this.rawBlock = this.getEthBlock(block);
+        this.blockWithData = new Block(this.rawBlock.getBlock());
+        return this.blockWithData;
     }
 }
 

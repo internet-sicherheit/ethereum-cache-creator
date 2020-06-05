@@ -8,15 +8,13 @@ public class InformationForJson {
 
     public BigInteger timestamp;
     public String fromAddress;
-    public final String toAddress;
+    public String toAddress;
 
     public InformationForJson(BlockTransaction blockTransaction,BigInteger timestamp ) {
 
         this.timestamp = timestamp;
-        this.fromAddress = blockTransaction.fromAddress;
-        this.toAddress = blockTransaction.toAddress;
-
-
+        this.fromAddress = blockTransaction.fromAddress.address;
+        this.toAddress = blockTransaction.toAddress.address;
     }
 
 

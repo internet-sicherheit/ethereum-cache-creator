@@ -4,12 +4,12 @@ import org.web3j.protocol.core.methods.response.Transaction;
 
 public class BlockTransaction {
 
-    public String fromAddress;
-    public String toAddress;
+    public TransactionAddress fromAddress;
+    public TransactionAddress toAddress;
 
     public BlockTransaction(Transaction transaction) {
-        this.fromAddress = transaction.getFrom();
-        this.toAddress = transaction.getTo();
+        this.fromAddress = new TransactionAddress(transaction.getFrom());
+        this.toAddress = new TransactionAddress(transaction.getTo());
     }
 
 }

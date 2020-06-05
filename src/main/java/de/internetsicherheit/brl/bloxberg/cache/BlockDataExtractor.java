@@ -2,6 +2,7 @@ package de.internetsicherheit.brl.bloxberg.cache;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
+import de.internetsicherheit.brl.bloxberg.cache.ethereum.Block;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockTransaction;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BloxbergClient;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.InformationForJson;
@@ -50,11 +51,11 @@ public class BlockDataExtractor {
 
     }
 
-
     public void writeOutTransactions(int blockNumber, SequenceWriter seqWriter) throws IOException {
-        BigInteger blockBigInteger = BigInteger.valueOf(blockNumber);
-        List<BlockTransaction> transactions = client.getBlockWithData(blockBigInteger).getTransactions();
-        BigInteger timestamp = client.getBlockTimestamp(blockBigInteger);
+        BigInteger blockNumberToBigInteger = BigInteger.valueOf(blockNumber);
+        Block block = client.getBlock(blockNumberToBigInteger);
+        List<BlockTransaction> transactions = block.getTransactions();
+        BigInteger timestamp = block.getTimestamp();
 
         for (BlockTransaction transaction : transactions) {
             seqWriter.write(new InformationForJson(transaction, timestamp));
