@@ -2,8 +2,6 @@ package de.internetsicherheit.brl.bloxberg.cache.ethereum;
 
 import org.web3j.protocol.websocket.WebSocketListener;
 
-import java.io.IOException;
-
 /**
  * this class listens to the WebsocketClient and triggers its methods whenever a request is sent.
  *
@@ -17,18 +15,17 @@ public class WebSocketListenerMessageCatcher implements WebSocketListener {
     /**
      * Some requests trigger messages, others do not. In this method we can handle these messages.
      * @param message the message sent by the WebSocketClient
-     * @throws IOException
      */
     @Override
-    public void onMessage(String message) throws IOException {
+    public void onMessage(String message) {
         currentMessage = message;
-        System.out.println(currentMessage);
+        System.out.println("WebSocketListenerMessageCatcher.currentMessage: " + currentMessage);
 
     }
 
     @Override
     public void onError(Exception e) {
-        System.out.println(e.getCause());
+        e.getCause();
 
     }
 
