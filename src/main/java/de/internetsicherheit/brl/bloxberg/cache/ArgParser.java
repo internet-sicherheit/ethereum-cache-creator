@@ -11,7 +11,7 @@ public class ArgParser {
         parsedArgs[0] = "https://core.bloxberg.org";
         parsedArgs[1] = "transactions_from_to";
         parsedArgs[2] = "0";
-        parsedArgs[3] = "1000";
+        parsedArgs[3] = "10000";
         parsedArgs[4] = "cli";
         for (int i = 0; i < args.length; i++) {
             String[] parts;

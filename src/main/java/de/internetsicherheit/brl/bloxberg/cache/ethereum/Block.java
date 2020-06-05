@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Block {
-    private final List<BlockTransaction> blockTransactions;
+    private List<BlockTransaction> blockTransactions;
 
     @SuppressWarnings("rawtypes") // we get the raw type from web3j like this
     private List<TransactionResult> transactions;
@@ -62,6 +62,10 @@ public class Block {
                 .collect(Collectors.toList());
     }
 
+    public void labelTransactions(List<BlockTransaction> labelledTransactions){
+        this.blockTransactions = labelledTransactions;
+    }
+
     public List<BlockTransaction> getTransactions() {
 
         return this.blockTransactions;
@@ -71,4 +75,5 @@ public class Block {
 
         return this.timestamp;
     }
+
 }

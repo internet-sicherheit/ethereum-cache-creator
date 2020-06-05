@@ -6,10 +6,12 @@ import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
+import org.web3j.protocol.core.methods.response.EthGetCode;
 import org.web3j.protocol.http.HttpService;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.List;
 
 public class BloxbergClient {
 
@@ -57,8 +59,36 @@ public class BloxbergClient {
         return this.blockWithData;
     }
 
+    private boolean isSmartContract(String address) throws IOException {
+
+        EthGetCode addressCodeRequest = web3j.ethGetCode(address, DefaultBlockParameter.valueOf("latest")).send();
+        return !addressCodeRequest.getResult().equals("0x");
+    }
+
+
+    private TransactionAddress.type getTransactionAddressType(TransactionAddress address) throws IOException {
+        if (address.address == null) {
+            return TransactionAddress.type.NONE;
+        } else if (isSmartContract(address.address)) {
+            return TransactionAddress.type.SMARTCONTRACT;
+        } else {
+            return TransactionAddress.type.USERORVALIDATOR;
+        }
+    }
+
+
+    private void labelTransactionsOfBlock(Block block) throws IOException {
+        List<BlockTransaction> transactionsToLabel = block.getTransactions();
+        for (BlockTransaction transaction : transactionsToLabel) {
+            transaction.fromAddress.label = this.getTransactionAddressType(transaction.fromAddress);
+            transaction.toAddress.label = this.getTransactionAddressType(transaction.toAddress);
+        }
+        block.labelTransactions(transactionsToLabel);
+    }
+
     public Block getBlock(BigInteger block) throws IOException {
         this.blockWithData = this.getBlockWithData(block);
+        this.labelTransactionsOfBlock(this.blockWithData);
         return this.blockWithData;
     }
 }
