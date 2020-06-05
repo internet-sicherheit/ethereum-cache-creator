@@ -21,7 +21,6 @@ public class CacheFileReader {
         this.lineCount = 0;
         try {
             this.lineCount = (int)countLines();
-            System.out.println("lineCount: " + lineCount);
         } catch (IOException e) {
         }
 
