@@ -5,6 +5,7 @@ public class ArgParser {
     public ArgParser() {
 
     }
+
     public String[] parseArgs(String[] args) {
         String[] parsedArgs = new String[5];
         // defaults
@@ -15,23 +16,23 @@ public class ArgParser {
         parsedArgs[4] = "cli";
         for (int i = 0; i < args.length; i++) {
             String[] parts;
-            if(args[i].contains("=")) {
+            if (args[i].contains("=")) {
                 parts = args[i].split("=");
                 switch (parts[0]) {
                     case "--ui":
-                        parsedArgs[4] = parts[parts.length -1];
+                        parsedArgs[4] = parts[parts.length - 1];
                         break;
                     case "--url":
-                        parsedArgs[0] = parts[parts.length -1];
+                        parsedArgs[0] = parts[parts.length - 1];
                         break;
                     case "--filename":
-                        parsedArgs[1] = parts[parts.length -1];
+                        parsedArgs[1] = parts[parts.length - 1];
                         break;
                     case "--start":
-                        parsedArgs[2] = parts[parts.length -1];
+                        parsedArgs[2] = parts[parts.length - 1];
                         break;
                     case "--stop":
-                        parsedArgs[3] = parts[parts.length -1];
+                        parsedArgs[3] = parts[parts.length - 1];
                         break;
                 }
             }

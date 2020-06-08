@@ -35,7 +35,6 @@ public class BlockDataExtractor {
         this.outputfile = new File(OUTPUTDIRECTORYNAME + filename + ".json");
         this.start = Integer.parseInt(args[2]);
         this.stop = Integer.parseInt(args[3]);
-
     }
 
     public void generateJsonFile() throws IOException {
@@ -48,7 +47,6 @@ public class BlockDataExtractor {
             writeOutTransactions(start, seqWriter);
         }
         seqWriter.close();
-
     }
 
     public void writeOutTransactions(int blockNumber, SequenceWriter seqWriter) throws IOException {

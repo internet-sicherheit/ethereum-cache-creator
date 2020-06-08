@@ -35,12 +35,6 @@ public class BloxbergClient {
         web3j = Web3j.build(new HttpService(networkUrl));
     }
 
-    public BigInteger getCurrentBlockNumber() throws IOException {
-        EthBlockNumber blockNumber = web3j.ethBlockNumber().send();
-        return blockNumber.getBlockNumber();
-
-    }
-
     /**
      * sends a request to the blockchain to extract the number of transactions in a single block.
      * this method is quite timeconsuming.
