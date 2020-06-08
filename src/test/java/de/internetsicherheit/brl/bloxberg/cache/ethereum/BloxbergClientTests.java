@@ -32,6 +32,14 @@ public class BloxbergClientTests {
         assertThat(blockWithTransactionCount).isEqualTo(expectedTransactionCount);
     }
 
+    @Test
+    void labelsAddressesAsUserOrSC() throws IOException {
+        BloxbergClient client = buildClient();
+        Block block = client.getBlock(BigInteger.valueOf(5036567));
+        assertThat(block.getTransactions().get(0).fromAddress.label).isEqualTo(TransactionAddress.Type.USERORVALIDATOR);
+        assertThat(block.getTransactions().get(0).toAddress.label).isEqualTo(TransactionAddress.Type.SMARTCONTRACT);
+    }
+
     private BloxbergClient buildClient() {
         return new BloxbergClient("https://core.bloxberg.org");
     }
