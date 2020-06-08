@@ -2,13 +2,14 @@ package de.internetsicherheit.brl.bloxberg.cache.ethereum;
 
 public class TransactionAddress {
     public String address;
-    public type label;
+    public Type label;
 
-    public TransactionAddress(String address) {
+    public TransactionAddress(String address, Type label) {
         this.address = address;
+        this.label = label;
     }
 
-    public enum type {
+    public enum Type {
         USERORVALIDATOR,
         SMARTCONTRACT,
         NONE

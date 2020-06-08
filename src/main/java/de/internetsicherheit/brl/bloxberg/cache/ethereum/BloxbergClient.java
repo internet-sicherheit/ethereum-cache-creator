@@ -3,19 +3,22 @@ package de.internetsicherheit.brl.bloxberg.cache.ethereum;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
-import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.core.methods.response.EthBlockNumber;
-import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByNumber;
-import org.web3j.protocol.core.methods.response.EthGetCode;
+import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.http.HttpService;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class BloxbergClient {
 
     private final Web3j web3j;
+
+    private final Map<String, TransactionAddress.Type> addressTypeCache = new HashMap<>();
+
     /**
      * the bloxbergclient. any other blockchain can be used aswell
      *
@@ -46,46 +49,58 @@ public class BloxbergClient {
         return transactionCountByNumber.getTransactionCount().intValue();
     }
 
-    private EthBlock getEthBlock(BigInteger block) throws IOException {
+    public Block getBlock(BigInteger block) throws IOException {
+        EthBlock rawBlock = this.fetchEthBlock(block);
+        List<BlockTransaction> transactions = convertToBlockTransactions(rawBlock);
+        return new Block(rawBlock.getBlock(), transactions);
+    }
+
+    private List<BlockTransaction> convertToBlockTransactions(EthBlock rawBlock) {
+        return rawBlock.getBlock().getTransactions().stream()
+                    .map(t -> (Transaction) t)
+                    .map(this::convertToBlockTransaction)
+                    .collect(Collectors.toList());
+    }
+
+    private BlockTransaction convertToBlockTransaction(Transaction t) {
+        TransactionAddress from = new TransactionAddress(t.getFrom(),
+                getAddressTypeFromCache(t.getFrom()));
+        TransactionAddress to = new TransactionAddress(t.getTo(),
+                getAddressTypeFromCache(t.getTo()));
+
+        return new BlockTransaction(from, to);
+    }
+
+    private TransactionAddress.Type getAddressTypeFromCache(String address) {
+        return addressTypeCache.computeIfAbsent(address, this::mapToType);
+    }
+
+
+    private EthBlock fetchEthBlock(BigInteger block) throws IOException {
         return web3j.ethGetBlockByNumber(DefaultBlockParameter.valueOf(block), true).send();
     }
 
-    private Block getBlockWithData(BigInteger block) throws IOException {
-        EthBlock rawBlock = this.getEthBlock(block);
-        Block blockWithData = new Block(rawBlock.getBlock());
-        return blockWithData;
-    }
-
-    private boolean isSmartContract(String address) throws IOException {
-        EthGetCode addressCodeRequest = web3j.ethGetCode(address, DefaultBlockParameter.valueOf("latest")).send();
+    private boolean isSmartContract(String address) {
+        EthGetCode addressCodeRequest;
+        try {
+            addressCodeRequest = web3j.ethGetCode(address, DefaultBlockParameter.valueOf("latest")).send();
+        } catch (IOException e) {
+            // TODO: add or think about retry logic
+            return false;
+        }
         return !addressCodeRequest.getResult().equals("0x");
     }
 
 
-    private TransactionAddress.type mapToType(TransactionAddress address) throws IOException {
-        if (address.address == null) {
-            return TransactionAddress.type.NONE;
-        } else if (isSmartContract(address.address)) {
-            return TransactionAddress.type.SMARTCONTRACT;
+    private TransactionAddress.Type mapToType(String address) {
+        if (address == null) {
+            return TransactionAddress.Type.NONE;
+        } else if (isSmartContract(address)) {
+            return TransactionAddress.Type.SMARTCONTRACT;
         } else {
-            return TransactionAddress.type.USERORVALIDATOR;
+            return TransactionAddress.Type.USERORVALIDATOR;
         }
     }
 
-
-    private void labelTransactionsOfBlock(Block block) throws IOException {
-        List<BlockTransaction> transactionsToLabel = block.getTransactions();
-        for (BlockTransaction transaction : transactionsToLabel) {
-            transaction.fromAddress.label = this.mapToType(transaction.fromAddress);
-            transaction.toAddress.label = this.mapToType(transaction.toAddress);
-        }
-        block.labelTransactions(transactionsToLabel);
-    }
-
-    public Block getBlock(BigInteger block) throws IOException {
-        Block blockWithData = this.getBlockWithData(block);
-        this.labelTransactionsOfBlock(blockWithData);
-        return blockWithData;
-    }
 }
 
