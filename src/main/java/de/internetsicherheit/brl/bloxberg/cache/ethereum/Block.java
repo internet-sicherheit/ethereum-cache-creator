@@ -6,24 +6,23 @@ import java.math.BigInteger;
 import java.util.List;
 
 public class Block {
-    private List<BlockTransaction> blockTransactions;
+    private final List<BlockTransaction> blockTransactions;
 
-    private List<String> sealFields;
-    private String author;
-    private BigInteger difficulty;
-    private String extraData;
-    private BigInteger gasLimit;
-    private BigInteger gasUsed;
-    private String hash;
-    private String logsBloom;
-    private String miner;
-    private int nonce;
-    private BigInteger number;
-    private String parentHash;
-    private String receiptRoot;
-    private BigInteger size;
-    private List<String> uncles;
-    private BigInteger timestamp;
+    private final List<String> sealFields;
+    private final String author;
+    private final BigInteger difficulty;
+    private final String extraData;
+    private final BigInteger gasLimit;
+    private final BigInteger gasUsed;
+    private final String hash;
+    private final String logsBloom;
+    private final String miner;
+    private final BigInteger number;
+    private final String parentHash;
+    private final String receiptRoot;
+    private final BigInteger size;
+    private final List<String> uncles;
+    private final BigInteger timestamp;
 
     /**
      * a simple custom Datatype that represents a combination of a blocknumber and the corresponding transactioncount

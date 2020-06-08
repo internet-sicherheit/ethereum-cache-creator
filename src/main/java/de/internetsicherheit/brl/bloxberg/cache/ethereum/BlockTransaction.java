@@ -2,8 +2,8 @@ package de.internetsicherheit.brl.bloxberg.cache.ethereum;
 
 public class BlockTransaction {
 
-    public TransactionAddress fromAddress;
-    public TransactionAddress toAddress;
+    public final TransactionAddress fromAddress;
+    public final TransactionAddress toAddress;
 
     public BlockTransaction(TransactionAddress fromAddress, TransactionAddress toAddress) {
         this.fromAddress = fromAddress;
