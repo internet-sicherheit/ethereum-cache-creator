@@ -1,5 +1,9 @@
 package de.internetsicherheit.brl.bloxberg.cache.ethereum;
 
+import org.rnorth.ducttape.TimeoutException;
+import org.rnorth.ducttape.unreliables.Unreliables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
@@ -11,6 +15,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class BloxbergClient {
@@ -18,6 +23,8 @@ public class BloxbergClient {
     private final Web3j web3j;
 
     private final Map<String, TransactionAddress.Type> addressTypeCache = new HashMap<>();
+
+    private static Logger logger = LoggerFactory.getLogger(BloxbergClient.class);
 
     /**
      * the bloxbergclient. any other blockchain can be used aswell
@@ -42,7 +49,6 @@ public class BloxbergClient {
      * @return the transactioncount
      * @throws IOException connection to client lost/cannot be established
      */
-
     public int getNumberOfTransactionsInBlock(BigInteger block) throws IOException {
         Request<?, EthGetBlockTransactionCountByNumber> request = web3j.ethGetBlockTransactionCountByNumber(DefaultBlockParameter.valueOf(block));
         EthGetBlockTransactionCountByNumber transactionCountByNumber = request.send();
@@ -57,9 +63,9 @@ public class BloxbergClient {
 
     private List<BlockTransaction> convertToBlockTransactions(EthBlock rawBlock) {
         return rawBlock.getBlock().getTransactions().stream()
-                    .map(t -> (Transaction) t)
-                    .map(this::convertToBlockTransaction)
-                    .collect(Collectors.toList());
+                .map(t -> (Transaction) t)
+                .map(this::convertToBlockTransaction)
+                .collect(Collectors.toList());
     }
 
     private BlockTransaction convertToBlockTransaction(Transaction t) {
@@ -75,7 +81,6 @@ public class BloxbergClient {
         return addressTypeCache.computeIfAbsent(address, this::mapToType);
     }
 
-
     private EthBlock fetchEthBlock(BigInteger block) throws IOException {
         return web3j.ethGetBlockByNumber(DefaultBlockParameter.valueOf(block), true).send();
     }
@@ -83,14 +88,16 @@ public class BloxbergClient {
     private boolean isSmartContract(String address) {
         EthGetCode addressCodeRequest;
         try {
-            addressCodeRequest = web3j.ethGetCode(address, DefaultBlockParameter.valueOf("latest")).send();
-        } catch (IOException e) {
-            // TODO: add or think about retry logic
-            return false;
+            addressCodeRequest = Unreliables.retryUntilSuccess(30, TimeUnit.SECONDS,
+                    () -> web3j.ethGetCode(address, DefaultBlockParameter.valueOf("latest")).send()
+            );
+            return !addressCodeRequest.getResult().equals("0x");
+        } catch (TimeoutException e) {
+            logger.error("Can't get code for SC, better to give up then to get wrong data ¯\\_(ツ)_/¯", e);
+            throw new RuntimeException(e);
         }
-        return !addressCodeRequest.getResult().equals("0x");
-    }
 
+    }
 
     private TransactionAddress.Type mapToType(String address) {
         if (address == null) {
