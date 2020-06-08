@@ -16,9 +16,6 @@ import java.util.List;
 public class BloxbergClient {
 
     private final Web3j web3j;
-    private Block blockWithData;
-
-
     /**
      * the bloxbergclient. any other blockchain can be used aswell
      *
@@ -55,18 +52,17 @@ public class BloxbergClient {
 
     private Block getBlockWithData(BigInteger block) throws IOException {
         EthBlock rawBlock = this.getEthBlock(block);
-        this.blockWithData = new Block(rawBlock.getBlock());
-        return this.blockWithData;
+        Block blockWithData = new Block(rawBlock.getBlock());
+        return blockWithData;
     }
 
     private boolean isSmartContract(String address) throws IOException {
-
         EthGetCode addressCodeRequest = web3j.ethGetCode(address, DefaultBlockParameter.valueOf("latest")).send();
         return !addressCodeRequest.getResult().equals("0x");
     }
 
 
-    private TransactionAddress.type getTransactionAddressType(TransactionAddress address) throws IOException {
+    private TransactionAddress.type mapToType(TransactionAddress address) throws IOException {
         if (address.address == null) {
             return TransactionAddress.type.NONE;
         } else if (isSmartContract(address.address)) {
@@ -80,16 +76,16 @@ public class BloxbergClient {
     private void labelTransactionsOfBlock(Block block) throws IOException {
         List<BlockTransaction> transactionsToLabel = block.getTransactions();
         for (BlockTransaction transaction : transactionsToLabel) {
-            transaction.fromAddress.label = this.getTransactionAddressType(transaction.fromAddress);
-            transaction.toAddress.label = this.getTransactionAddressType(transaction.toAddress);
+            transaction.fromAddress.label = this.mapToType(transaction.fromAddress);
+            transaction.toAddress.label = this.mapToType(transaction.toAddress);
         }
         block.labelTransactions(transactionsToLabel);
     }
 
     public Block getBlock(BigInteger block) throws IOException {
-        this.blockWithData = this.getBlockWithData(block);
-        this.labelTransactionsOfBlock(this.blockWithData);
-        return this.blockWithData;
+        Block blockWithData = this.getBlockWithData(block);
+        this.labelTransactionsOfBlock(blockWithData);
+        return blockWithData;
     }
 }
 

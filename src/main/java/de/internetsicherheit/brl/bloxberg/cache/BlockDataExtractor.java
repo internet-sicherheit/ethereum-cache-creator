@@ -53,9 +53,9 @@ public class BlockDataExtractor {
 
     public void writeOutTransactions(int blockNumber, SequenceWriter seqWriter) throws IOException {
         BigInteger blockNumberToBigInteger = BigInteger.valueOf(blockNumber);
-        Block block = client.getBlock(blockNumberToBigInteger);
-        List<BlockTransaction> transactions = block.getTransactions();
-        BigInteger timestamp = block.getTimestamp();
+
+        List<BlockTransaction> transactions =  client.getBlock(blockNumberToBigInteger).getTransactions();
+        BigInteger timestamp = client.getBlock(blockNumberToBigInteger).getTimestamp();
 
         for (BlockTransaction transaction : transactions) {
             seqWriter.write(new InformationForJson(transaction, timestamp));
