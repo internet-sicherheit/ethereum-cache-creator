@@ -3,16 +3,13 @@ package de.internetsicherheit.brl.bloxberg.cache;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
-
 public class ArgParserTest {
     @Test
-    void testParser() throws IOException {
+    void testParser() {
         ArgParser parser = new ArgParser();
 
         String[] args = new String[5];
-        
+
         args[0] = "--url=https://some.kind.of.url";
         args[1] = "--filename=some_output_file";
         args[2] = "--start=13";
@@ -27,7 +24,7 @@ public class ArgParserTest {
         Assertions.assertEquals("13", parsedArgs[2]);
         Assertions.assertEquals("14", parsedArgs[3]);
         Assertions.assertEquals("gui", parsedArgs[4]);
-        
+
     }
 
 

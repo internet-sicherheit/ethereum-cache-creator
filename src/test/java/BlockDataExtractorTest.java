@@ -14,7 +14,6 @@ public class BlockDataExtractorTest {
     @DisplayName("does the json-File contain a timestamp? Requires at least 1 transaction.")
     @Test
     void testJsonFile() throws IOException {
-
         // set up client
         String[] args = new String[5];
         args[0] = "https://core.bloxberg.org";
@@ -25,7 +24,7 @@ public class BlockDataExtractorTest {
 
         // generate Json-File and read it
         bde.generateJsonFile();
-        Path outputfile = Path.of(BlockDataExtractor.OUTPUTDIRECTORYNAME,args[1] + ".json");
+        Path outputfile = Path.of(BlockDataExtractor.OUTPUTDIRECTORYNAME, args[1] + ".json");
         List<String> lines = Files.readAllLines(outputfile);
 
         // check if there is a timestamp in the file
