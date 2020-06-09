@@ -15,8 +15,5 @@ public class Launcher {
             LogicController logicController = new LogicController();
             logicController.createJson(parsedArgs);
         }
-
     }
-
-
 }

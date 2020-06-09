@@ -1,6 +1,6 @@
 package de.internetsicherheit.brl.bloxberg.cache.persistence;
 
-import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithData;
+import de.internetsicherheit.brl.bloxberg.cache.ethereum.Block;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithTransactionCombination;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ public class EthereumWriter {
                 + bwtc.transactionCount + "\n", StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 
     }
-    public void writeBlockWithData(BlockWithData bwtc) throws IOException {
+    public void writeBlockWithData(Block bwtc) throws IOException {
         Files.writeString(outputFilePath,  ","
                 +"\n", StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 

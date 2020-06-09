@@ -1,6 +1,6 @@
 package de.internetsicherheit.brl.bloxberg.cache;
 
-import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithData;
+import de.internetsicherheit.brl.bloxberg.cache.ethereum.Block;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BlockWithTransactionCombination;
 import de.internetsicherheit.brl.bloxberg.cache.ethereum.BloxbergClient;
 import de.internetsicherheit.brl.bloxberg.cache.persistence.EthereumWriter;
@@ -99,7 +99,7 @@ public class HistoricDataExtractor {
             e.printStackTrace();
         }
     }
-    private void writeBlockWithData(BlockWithData comb) {
+    private void writeBlockWithData(Block comb) {
         try {
             writer.writeBlockWithData(comb);
         } catch (IOException e) {

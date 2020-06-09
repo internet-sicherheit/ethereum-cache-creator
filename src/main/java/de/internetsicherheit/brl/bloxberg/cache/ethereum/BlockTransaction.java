@@ -1,15 +1,13 @@
 package de.internetsicherheit.brl.bloxberg.cache.ethereum;
 
-import org.web3j.protocol.core.methods.response.Transaction;
-
 public class BlockTransaction {
 
-    public String fromAddress;
-    public String toAddress;
+    public final TransactionAddress fromAddress;
+    public final TransactionAddress toAddress;
 
-    public BlockTransaction(Transaction transaction) {
-        this.fromAddress = transaction.getFrom();
-        this.toAddress = transaction.getTo();
+    public BlockTransaction(TransactionAddress fromAddress, TransactionAddress toAddress) {
+        this.fromAddress = fromAddress;
+        this.toAddress = toAddress;
     }
 
 }
