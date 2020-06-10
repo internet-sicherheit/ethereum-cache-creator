@@ -1,5 +1,6 @@
 package de.internetsicherheit.brl.bloxberg.cache.ethereum;
 
+import org.codehaus.httpcache4j.uri.URIBuilder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.Request;
@@ -15,6 +16,9 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.concurrent.CompletableFuture;
 
 public class BloxbergClient {
 
@@ -69,13 +73,19 @@ public class BloxbergClient {
         return blockNumber.getBlockNumber();
 
     }
-    public Web3j buildWssClient() throws URISyntaxException, InterruptedException {
-        WebSocketListenerMessageCatcher wsl = new WebSocketListenerMessageCatcher();
+    public Web3j buildWssClient(WebSocketListenerMessageCatcher wsl) throws URISyntaxException, InterruptedException {
+
         WebSocketClient webSocketClient;
         String wssBloxberg = "wss://websockets.bloxberg.org/";
         String wssInfura = "wss://mainnet.infura.io/ws/v3/18fb2fab0e8a4a588c66af7182314a7b";
 
-        webSocketClient = new WebSocketClient(new URI(wssBloxberg));
+        URI uriWithoutPort = new URI (wssBloxberg);
+
+        // does not work
+        URI uriWithPort = URIBuilder.fromURI(uriWithoutPort).withPort(8545).toURI();
+
+        webSocketClient = new WebSocketClient(uriWithoutPort);
+
 
         webSocketClient.setListener(wsl);
 
@@ -93,21 +103,52 @@ public class BloxbergClient {
 
 
     public void getSomeWssTestData() throws URISyntaxException, InterruptedException {
-        web3jwss = buildWssClient();
+        WebSocketListenerMessageCatcher wsl = new WebSocketListenerMessageCatcher();
+        web3jwss = buildWssClient(wsl);
         Request<?, Web3ClientVersion> request1 = web3jwss.web3ClientVersion();
         Request<?, EthGetBlockTransactionCountByNumber> request2 =
                 web3jwss.ethGetBlockTransactionCountByNumber(DefaultBlockParameter.valueOf(BigInteger.valueOf(33)));
         Request<?, EthBlockNumber> request3 = web3jwss.ethBlockNumber();
 
-        request1.sendAsync();
-        // request2 does not trigger a message
-        request2.sendAsync();
-        request3.sendAsync();
 
+        /*try {
+            System.out.println("clientversion: " + request1.sendAsync().get().getWeb3ClientVersion() + "\n"
+                    + "transactionCount: " + request2.sendAsync().get().getTransactionCount().longValue() + "\n"
+                    + "currentBlockNumber: " + request3.sendAsync().get().getBlockNumber().longValue());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }*/
 
-        // this gives us the whole transaction data we used to have as a String
-        web3jwss.ethGetBlockByNumber(DefaultBlockParameter.valueOf(BigInteger.valueOf(33)), false)
-                .sendAsync();
+        Date date = new Date();
+        Timestamp ts1 = new Timestamp(date.getTime());
+        for (int i = 0; i < 1000; i++) {
+            // this gives us the whole transaction data we used to have as a String
+            CompletableFuture future = web3jwss.ethGetBlockByNumber(DefaultBlockParameter.valueOf(BigInteger.valueOf(i)), false)
+                    .sendAsync();
+        }
+        Date date2 = new Date();
+        Timestamp ts2 = new Timestamp(date2.getTime());
+        for(int j = 0; j < 1000; j++) {
+            try {
+                getEthBlock(BigInteger.valueOf(j));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Date date3 = new Date();
+        Timestamp ts3 =  new Timestamp(date3.getTime());
+        System.out.println("timestamps_wss_1: " + ts1 + "\n" + "timestamps_wss_2: " + wsl.currentTs + "\n"
+                + "timestamps_http_1: " + ts2 + "\n" + "timestamps_http_2: " + ts3);
+
+        /*System.out.println("future is done: " + future.isDone());
+        System.out.println("future:" + future.toString());
+        BiConsumer bic = new BiConsumer() {
+            @Override
+            public void accept(Object o, Object o2) {
+                System.out.println("future completed.");
+            }
+        };
+        future.whenCompleteAsync(bic);*/
     }
 }
 
