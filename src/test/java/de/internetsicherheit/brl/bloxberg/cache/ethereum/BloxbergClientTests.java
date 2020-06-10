@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,6 +32,14 @@ public class BloxbergClientTests {
         int blockWithTransactionCount = client.getNumberOfTransactionsInBlock(bn);
         assertThat(blockWithTransactionCount).isEqualTo(expectedTransactionCount);
     }
+
+    @Test
+    void testWss() throws URISyntaxException, InterruptedException {
+        buildClient().getSomeWssTestData();
+
+        assert true;
+    }
+
 
     private BloxbergClient buildClient() {
         return new BloxbergClient("https://core.bloxberg.org");

@@ -7,6 +7,7 @@ import org.web3j.protocol.websocket.WebSocketListener;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * this class listens to the WebsocketClient and triggers its methods whenever a request is sent.
@@ -21,6 +22,8 @@ public class WebSocketListenerMessageCatcher implements WebSocketListener {
 
     EthBlock ethBlock;
 
+    private CountDownLatch latch;
+
 
 
     /**
@@ -30,17 +33,23 @@ public class WebSocketListenerMessageCatcher implements WebSocketListener {
     @Override
     public void onMessage(String message) {
         currentMessage = message;
+        latch.countDown();
         try {
             Date date = new Date();
             ethBlock = objectMapper.readValue(currentMessage, EthBlock.class);
-            System.out.println("blocknumber: " + ethBlock.getBlock().getNumber().longValue());
             currentTs = new Timestamp(date.getTime());
-            System.out.println("Timestamp after latest reply: " + currentTs);
-
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public void setLatch(int i) {
+        latch = new CountDownLatch(i);
+    }
+
+    public void waitForLatch() throws InterruptedException {
+        latch.await();
     }
 
     @Override
@@ -52,11 +61,5 @@ public class WebSocketListenerMessageCatcher implements WebSocketListener {
     @Override
     public void onClose() {
         System.out.println("WebSocketClient closed.");
-    }
-    public String giveCurrentMessage() {
-        return currentMessage;
-    }
-    public Timestamp getCurrentTs() {
-        return currentTs;
     }
 }

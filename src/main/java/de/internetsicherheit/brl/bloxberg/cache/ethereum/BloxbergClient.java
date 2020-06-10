@@ -105,29 +105,21 @@ public class BloxbergClient {
     public void getSomeWssTestData() throws URISyntaxException, InterruptedException {
         WebSocketListenerMessageCatcher wsl = new WebSocketListenerMessageCatcher();
         web3jwss = buildWssClient(wsl);
-        Request<?, Web3ClientVersion> request1 = web3jwss.web3ClientVersion();
-        Request<?, EthGetBlockTransactionCountByNumber> request2 =
-                web3jwss.ethGetBlockTransactionCountByNumber(DefaultBlockParameter.valueOf(BigInteger.valueOf(33)));
-        Request<?, EthBlockNumber> request3 = web3jwss.ethBlockNumber();
 
-
-        /*try {
-            System.out.println("clientversion: " + request1.sendAsync().get().getWeb3ClientVersion() + "\n"
-                    + "transactionCount: " + request2.sendAsync().get().getTransactionCount().longValue() + "\n"
-                    + "currentBlockNumber: " + request3.sendAsync().get().getBlockNumber().longValue());
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }*/
-
-        Date date = new Date();
-        Timestamp ts1 = new Timestamp(date.getTime());
-        for (int i = 0; i < 1000; i++) {
+        int numberOfMessages = 1000;
+        wsl.setLatch(numberOfMessages);
+        long startWss = System.currentTimeMillis();
+        for (int i = 0; i < numberOfMessages; i++) {
             // this gives us the whole transaction data we used to have as a String
             CompletableFuture future = web3jwss.ethGetBlockByNumber(DefaultBlockParameter.valueOf(BigInteger.valueOf(i)), false)
                     .sendAsync();
         }
-        Date date2 = new Date();
-        Timestamp ts2 = new Timestamp(date2.getTime());
+        wsl.waitForLatch();
+        long stopWss = System.currentTimeMillis();
+        long wssDuration = stopWss - startWss;
+        System.out.println(String.format("WS connection took %d ms for %d requests", wssDuration, numberOfMessages));
+
+        long httpStart = System.currentTimeMillis();
         for(int j = 0; j < 1000; j++) {
             try {
                 getEthBlock(BigInteger.valueOf(j));
@@ -135,20 +127,9 @@ public class BloxbergClient {
                 e.printStackTrace();
             }
         }
-        Date date3 = new Date();
-        Timestamp ts3 =  new Timestamp(date3.getTime());
-        System.out.println("timestamps_wss_1: " + ts1 + "\n" + "timestamps_wss_2: " + wsl.currentTs + "\n"
-                + "timestamps_http_1: " + ts2 + "\n" + "timestamps_http_2: " + ts3);
-
-        /*System.out.println("future is done: " + future.isDone());
-        System.out.println("future:" + future.toString());
-        BiConsumer bic = new BiConsumer() {
-            @Override
-            public void accept(Object o, Object o2) {
-                System.out.println("future completed.");
-            }
-        };
-        future.whenCompleteAsync(bic);*/
+        long httpEnd = System.currentTimeMillis();
+        long httpDuration = httpEnd - httpStart;
+        System.out.println(String.format("HTTP connection took %d ms for %d requests", httpDuration, numberOfMessages));
     }
 }
 
