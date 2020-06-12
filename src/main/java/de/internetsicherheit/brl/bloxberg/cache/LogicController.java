@@ -10,6 +10,6 @@ public class LogicController {
     public void createJson(String[] input) throws IOException {
         BlockDataExtractor blockDataExtractor = new BlockDataExtractor(input);
         blockDataExtractor.generateJsonFile();
-        blockDataExtractor.printOutWssTestData();
+        //blockDataExtractor.printOutWssTestData();
     }
 }

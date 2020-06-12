@@ -6,13 +6,15 @@ public class ArgParser {
 
     }
     public String[] parseArgs(String[] args) {
-        String[] parsedArgs = new String[5];
+        String[] parsedArgs = new String[6];
         // defaults
+        // https client (no longer in use)
         parsedArgs[0] = "https://core.bloxberg.org";
         parsedArgs[1] = "transactions_from_to";
         parsedArgs[2] = "0";
         parsedArgs[3] = "1000";
         parsedArgs[4] = "cli";
+        parsedArgs[5] = "wss://websockets.bloxberg.org/";
         for (int i = 0; i < args.length; i++) {
             String[] parts;
             if(args[i].contains("=")) {
@@ -32,6 +34,9 @@ public class ArgParser {
                         break;
                     case "--stop":
                         parsedArgs[3] = parts[parts.length -1];
+                        break;
+                    case "--wss":
+                        parsedArgs[5] = parts[parts.length -1];
                         break;
                 }
             }

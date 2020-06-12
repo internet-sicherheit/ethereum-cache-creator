@@ -7,7 +7,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,13 +30,6 @@ public class BloxbergClientTests {
         BigInteger bn = BigInteger.valueOf(blockNumber);
         int blockWithTransactionCount = client.getNumberOfTransactionsInBlock(bn);
         assertThat(blockWithTransactionCount).isEqualTo(expectedTransactionCount);
-    }
-
-    @Test
-    void testWss() throws URISyntaxException, InterruptedException {
-        buildClient().getSomeWssTestData();
-
-        assert true;
     }
 
 

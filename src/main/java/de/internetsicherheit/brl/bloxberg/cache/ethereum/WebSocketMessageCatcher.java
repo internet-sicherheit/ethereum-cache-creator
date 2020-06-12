@@ -5,25 +5,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.websocket.WebSocketListener;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.io.FileWriter;
 import java.util.concurrent.CountDownLatch;
 
 /**
  * this class listens to the WebsocketClient and triggers its methods whenever a request is sent.
  *
  */
-public class WebSocketListenerMessageCatcher implements WebSocketListener {
+public class WebSocketMessageCatcher implements WebSocketListener {
 
     String currentMessage;
-    Timestamp currentTs;
 
     ObjectMapper objectMapper = new ObjectMapper();
-
-    EthBlock ethBlock;
+    FileWriter fileWriter;
+    EthBlock[] ethBlock;
 
     private CountDownLatch latch;
-
+    public WebSocketMessageCatcher(FileWriter fileWriter) {
+        this.fileWriter = fileWriter;
+    }
 
 
     /**
@@ -33,11 +33,11 @@ public class WebSocketListenerMessageCatcher implements WebSocketListener {
     @Override
     public void onMessage(String message) {
         currentMessage = message;
+        System.out.println("currentmessage: " + currentMessage);
         latch.countDown();
         try {
-            Date date = new Date();
-            ethBlock = objectMapper.readValue(currentMessage, EthBlock.class);
-            currentTs = new Timestamp(date.getTime());
+            ethBlock = objectMapper.readValue(currentMessage, EthBlock[].class);
+
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

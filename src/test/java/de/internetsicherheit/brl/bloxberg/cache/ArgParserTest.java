@@ -3,21 +3,20 @@ package de.internetsicherheit.brl.bloxberg.cache;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 
 public class ArgParserTest {
     @Test
-    void testParser() throws IOException {
+    void testParser() {
         ArgParser parser = new ArgParser();
 
-        String[] args = new String[5];
+        String[] args = new String[6];
         
         args[0] = "--url=https://some.kind.of.url";
         args[1] = "--filename=some_output_file";
         args[2] = "--start=13";
         args[3] = "--stop=14";
         args[4] = "--ui=gui";
+        args[5] = "--wss=wss://websockets.bloxberg.org/";
 
         String[] parsedArgs = parser.parseArgs(args);
 

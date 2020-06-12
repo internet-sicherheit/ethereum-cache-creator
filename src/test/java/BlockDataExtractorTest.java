@@ -16,11 +16,12 @@ public class BlockDataExtractorTest {
     void testJsonFile() throws IOException {
 
         // set up client
-        String[] args = new String[5];
+        String[] args = new String[6];
         args[0] = "https://core.bloxberg.org";
         args[1] = "timestamps_test";
         args[2] = "33";
         args[3] = "34";
+        args[5] = "wss://websockets.bloxberg.org/";
         BlockDataExtractor bde = new BlockDataExtractor(args);
 
         // generate Json-File and read it
